@@ -233,6 +233,10 @@ footer small{color:var(--muted);font-size:.77rem;}
 [data-theme="light"] .bg-canvas{background:var(--bg);}
 [data-theme="light"] .bg-orb{opacity:.06;}
 [data-theme="light"] footer{background:rgba(239,233,255,.9);}
+[data-theme="light"] h1.hero-name,[data-theme="light"] .s-title,[data-theme="light"] .contact-tagline,[data-theme="light"] .modal-title{color:#1a0f35;}
+[data-theme="light"] h1.hero-name em,[data-theme="light"] .s-title em,[data-theme="light"] .contact-tagline em{background:linear-gradient(135deg,#7c22d4,#c026d3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+[data-theme="light"] .skill-card h3,[data-theme="light"] .proj-body h3{color:#1a0f35;}
+[data-theme="light"] .astat strong{background:linear-gradient(135deg,#7c22d4,#c026d3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 [data-theme="light"] .section-alt{background:rgba(232,223,255,.45);}
 [data-theme="light"] #tools{background:rgba(247,244,255,.8);}
 [data-theme="light"] .hero-desc,[data-theme="light"] .about-text p,[data-theme="light"] .contact-desc{color:var(--muted);}

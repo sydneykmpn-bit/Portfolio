@@ -13,7 +13,12 @@ export async function POST(req: Request) {
     }
 
     const groq = createGroq({ apiKey });
-    const models = ['llama-3.3-70b-versatile', 'llama-3.1-70b-versatile', 'llama3-70b-8192'];
+    // Only use active models — llama-3.1-70b and llama3-70b-8192 are decommissioned
+    const models = [
+      'llama-3.3-70b-versatile',
+      'llama-3.1-8b-instant',
+      'gemma2-9b-it',
+    ];
 
     for (const model of models) {
       try {
@@ -21,8 +26,8 @@ export async function POST(req: Request) {
           model: groq(model),
           system: SYSTEM_PROMPT,
           messages,
-          temperature: 0.75,
-          maxTokens: 400,
+          temperature: 0.7,
+          maxTokens: 350,
         });
         return Response.json({ reply: text });
       } catch {

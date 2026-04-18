@@ -34,7 +34,7 @@ function renderLine(line: string, lineKey: number) {
         }
         if (IS_EMAIL.test(part)) {
           return (
-            <a key={i} href={`mailto:${part}`} target="_blank" rel="noreferrer"
+            <a key={i} href={`mailto:${part}`}
               style={{ color: 'var(--p1)', textDecoration: 'underline' }}>
               {part}
             </a>
