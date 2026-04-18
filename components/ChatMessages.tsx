@@ -8,7 +8,7 @@ import ProjectCards from './ProjectCards';
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: string;
   content: string;
 }
 
