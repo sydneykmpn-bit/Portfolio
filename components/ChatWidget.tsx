@@ -15,26 +15,33 @@ function clean(raw: string) {
   return raw.replace(/SHOW_PROJECTS/gi, '').replace(/[ \t]+/g, ' ').trim();
 }
 
-const URL_RE = /(https?:\/\/[^\s]+)/g;
+const SPLIT_RE = /(https?:\/\/[^\s]+|[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g;
 const IS_URL = /^https?:\/\//;
+const IS_EMAIL = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
 function renderLine(line: string, lineKey: number) {
-  const parts = line.split(URL_RE);
+  const parts = line.split(SPLIT_RE);
   return (
     <span key={lineKey}>
-      {parts.map((part, i) =>
-        IS_URL.test(part) ? (
-          <a
-            key={i}
-            href={part}
-            target="_blank"
-            rel="noreferrer"
-            style={{ color: 'var(--p1)', textDecoration: 'underline', wordBreak: 'break-all' }}
-          >
-            {part}
-          </a>
-        ) : part
-      )}
+      {parts.map((part, i) => {
+        if (IS_URL.test(part)) {
+          return (
+            <a key={i} href={part} target="_blank" rel="noreferrer"
+              style={{ color: 'var(--p1)', textDecoration: 'underline', wordBreak: 'break-all' }}>
+              {part}
+            </a>
+          );
+        }
+        if (IS_EMAIL.test(part)) {
+          return (
+            <a key={i} href={`mailto:${part}`} target="_blank" rel="noreferrer"
+              style={{ color: 'var(--p1)', textDecoration: 'underline' }}>
+              {part}
+            </a>
+          );
+        }
+        return part;
+      })}
     </span>
   );
 }
@@ -84,7 +91,7 @@ export default memo(function ChatWidget() {
         body: JSON.stringify({ messages: history.current }),
       });
       const data = await res.json();
-      const reply = data.reply || 'Something went wrong — email sydneykmpn@gmail.com';
+      const reply = data.reply || 'Something went wrong — email sydneykmpn@gmail.com directly.';
       const aiMsg: Msg = { role: 'assistant', content: reply };
       history.current.push(aiMsg);
       setTyping(false);
