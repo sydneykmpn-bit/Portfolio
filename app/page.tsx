@@ -121,11 +121,7 @@ export default function Page() {
       <ScrollReveal />
 
       {/* Animated background */}
-      <div className="bg-canvas">
-        <div className="bg-orb" />
-        <div className="bg-orb" />
-        <div className="bg-orb" />
-      </div>
+      <div className="bg-canvas" />
 
       {/* NAV */}
       <nav>
