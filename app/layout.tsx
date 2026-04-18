@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Sydney Puang — AI Automation Engineer',
+  title: 'Sydney Pua Ng — AI Automation Engineer',
   description: 'AI Automation Engineer based in Manila, PH. I build smart automation systems and AI tools that save businesses time and effort.',
   keywords: ['AI automation', 'Zapier', 'n8n', 'Make', 'workflow', 'Tech VA', 'Philippines'],
   openGraph: {

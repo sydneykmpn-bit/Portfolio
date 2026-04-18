@@ -7,19 +7,62 @@ interface Msg { role: 'user' | 'assistant'; content: string }
 const QUICK = [
   "What do you do?",
   "How can I work with you?",
-  "What are your rates?",
-  "How do I cancel my booking?",
+  "Show me your projects",
+  "How much are your rates?",
 ];
+
+function clean(raw: string) {
+  return raw.replace(/SHOW_PROJECTS/gi, '').replace(/[ \t]+/g, ' ').trim();
+}
+
+const URL_RE = /(https?:\/\/[^\s]+)/g;
+const IS_URL = /^https?:\/\//;
+
+function renderLine(line: string, lineKey: number) {
+  const parts = line.split(URL_RE);
+  return (
+    <span key={lineKey}>
+      {parts.map((part, i) =>
+        IS_URL.test(part) ? (
+          <a
+            key={i}
+            href={part}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: 'var(--p1)', textDecoration: 'underline', wordBreak: 'break-all' }}
+          >
+            {part}
+          </a>
+        ) : part
+      )}
+    </span>
+  );
+}
+
+function MsgContent({ text }: { text: string }) {
+  // Split on any newline (single or double); also split long runs on sentence boundaries
+  const raw = clean(text);
+  const paragraphs = raw.split(/\n+/).map(p => p.trim()).filter(Boolean);
+  if (paragraphs.length <= 1) return renderLine(raw, 0);
+  return (
+    <>
+      {paragraphs.map((p, i) => (
+        <p key={i} style={{ margin: i < paragraphs.length - 1 ? '0 0 0.52rem' : '0' }}>
+          {renderLine(p, i)}
+        </p>
+      ))}
+    </>
+  );
+}
 
 export default memo(function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: 'assistant', content: "Hey! 👋 Have a question about Sydney's work or want to know how to get started? Ask me anything." }
+    { role: 'assistant', content: "Hey! Have a question about Sydney's work or want to get started? Ask me anything." }
   ]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [showQuick, setShowQuick] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
   const history = useRef<Msg[]>([]);
 
@@ -27,7 +70,6 @@ export default memo(function ChatWidget() {
     if (!text.trim() || busy) return;
     setInput('');
     setBusy(true);
-    setShowQuick(false);
     setTyping(true);
 
     const userMsg: Msg = { role: 'user', content: text };
@@ -83,7 +125,7 @@ export default memo(function ChatWidget() {
           <div className="cp-msgs">
             {msgs.map((m, i) => (
               <div key={i} className={`cmsg ${m.role === 'user' ? 'user' : 'ai'}`}>
-                {m.content}
+                <MsgContent text={m.content} />
               </div>
             ))}
             {typing && (
@@ -94,13 +136,11 @@ export default memo(function ChatWidget() {
             <div ref={bottomRef} />
           </div>
 
-          {showQuick && (
-            <div className="cp-qs">
-              {QUICK.map(q => (
-                <button key={q} className="cpq" onClick={() => send(q)}>{q}</button>
-              ))}
-            </div>
-          )}
+          <div className="cp-qs">
+            {QUICK.map(q => (
+              <button key={q} className="cpq" onClick={() => send(q)} disabled={busy}>{q}</button>
+            ))}
+          </div>
 
           <div className="cp-input-row">
             <textarea

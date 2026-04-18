@@ -2,6 +2,8 @@ import { createGroq } from '@ai-sdk/groq';
 import { generateText } from 'ai';
 import { SYSTEM_PROMPT } from '@/lib/prompt';
 
+export const maxDuration = 30;
+
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
