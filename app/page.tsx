@@ -191,7 +191,10 @@ export default function Page() {
           <div className="flex-1 flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto px-4 py-4">
               <div className="max-w-2xl mx-auto">
-                <ChatMessages messages={messages} isLoading={isLoading} />
+                <ChatMessages
+                  messages={messages.map(m => ({ id: m.id, role: m.role, content: m.content }))}
+                  isLoading={isLoading}
+                />
 
                 {/* API error banner */}
                 {error && (
