@@ -209,8 +209,8 @@ export default function Page() {
       </div>
 
       {/* ABOUT */}
-      <section className="section section-alt" id="about">
-        <div className="s-label">About</div>
+      <section className="section section-alt" id="about" style={{ textAlign: 'center' }}>
+        <div className="s-label" style={{ textAlign: 'center' }}>About</div>
         <div className="about-solo">
           <h2 className="s-title">Building systems that<br /><em>just work.</em></h2>
           <p className="about-lead">I&apos;m Sydney Pua Ng — an AI Automation Engineer and BS Computer Science student at the University of the Philippines Manila. I design workflows and intelligent tools that eliminate repetitive tasks and let teams focus on what actually matters.</p>

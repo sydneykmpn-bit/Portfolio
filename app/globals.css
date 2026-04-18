@@ -119,14 +119,14 @@ h1.hero-name em{background:var(--grad);-webkit-background-clip:text;-webkit-text
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ── ABOUT ── */
-.about-solo{max-width:720px;margin-top:2.5rem;}
-.about-lead{color:#9d8cc0;line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
-.about-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2.2rem 0 2rem;}
-.astat{background:var(--bg3);border:1px solid var(--bdr);border-radius:14px;padding:1.1rem 1.2rem;transition:border-color .2s,box-shadow .2s;}
-.astat:hover{border-color:var(--bdr2);box-shadow:var(--glow);}
-.astat strong{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;line-height:1.1;}
-.astat span{color:var(--muted);font-size:.75rem;display:block;margin-top:.3rem;line-height:1.35;}
-@media(max-width:600px){.about-stats{grid-template-columns:repeat(2,1fr);}}
+.about-solo{max-width:860px;margin:2.5rem auto 0;text-align:center;}
+.about-lead{color:#9d8cc0;line-height:1.9;margin-bottom:1rem;font-size:.95rem;max-width:640px;margin-left:auto;margin-right:auto;}
+.about-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2.4rem auto 2rem;max-width:860px;}
+.astat{background:var(--bg3);border:1px solid var(--bdr);border-radius:16px;padding:1.4rem 1rem;text-align:center;transition:border-color .22s,box-shadow .22s,transform .22s;}
+.astat:hover{border-color:var(--bdr2);box-shadow:var(--glow);transform:translateY(-3px);}
+.astat strong{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;line-height:1.1;}
+.astat span{color:var(--muted);font-size:.73rem;display:block;margin-top:.35rem;line-height:1.4;}
+@media(max-width:600px){.about-stats{grid-template-columns:repeat(2,1fr);}.about-solo{text-align:left;}}
 
 /* ── SKILLS ── */
 .skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.2rem;margin-top:3rem;}
