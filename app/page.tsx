@@ -211,25 +211,17 @@ export default function Page() {
       {/* ABOUT */}
       <section className="section section-alt" id="about">
         <div className="s-label">About</div>
-        <div className="about-grid">
-          <div className="about-text">
-            <h2 className="s-title">Building systems that<br /><em>just work.</em></h2>
-            <br />
-            <p>I&apos;m Sydney Pua Ng — an AI Automation Engineer and BS Computer Science student at the University of the Philippines Manila. I design workflows and intelligent tools that eliminate repetitive tasks and let teams focus on what actually matters.</p>
-            <p>I&apos;m passionate about automation and actively looking for clients. If you have a process that needs automating or an idea you want to bring to life, I&apos;d love to help.</p>
-            <br />
-            <a href="#contact" className="btn-primary">Get in touch →</a>
+        <div className="about-solo">
+          <h2 className="s-title">Building systems that<br /><em>just work.</em></h2>
+          <p className="about-lead">I&apos;m Sydney Pua Ng — an AI Automation Engineer and BS Computer Science student at the University of the Philippines Manila. I design workflows and intelligent tools that eliminate repetitive tasks and let teams focus on what actually matters.</p>
+          <p className="about-lead">I&apos;m passionate about automation and actively looking for clients. If you have a process that needs automating or an idea you want to bring to life, I&apos;d love to help.</p>
+          <div className="about-stats">
+            <div className="astat"><strong>9+</strong><span>Projects built</span></div>
+            <div className="astat"><strong>3</strong><span>Platforms mastered</span></div>
+            <div className="astat"><strong>30hrs</strong><span>Saved per client/week</span></div>
+            <div className="astat"><strong>24/7</strong><span>Automation uptime</span></div>
           </div>
-          <div className="photo-frame">
-            <div className="photo-box">
-              <Image
-                src="/2x2.png"
-                alt="Sydney Pua Ng"
-                fill
-                style={{ objectFit: 'cover', objectPosition: 'center 10%', borderRadius: '20px' }}
-              />
-            </div>
-          </div>
+          <a href="#contact" className="btn-primary">Get in touch →</a>
         </div>
       </section>
 
