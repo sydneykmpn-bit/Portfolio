@@ -174,7 +174,10 @@ export default function Page() {
         </div>
 
         <div className="hero-tag">Open to work</div>
-        <h1 className="hero-name">I&apos;m <em>Sydney</em></h1>
+        <h1 className="hero-name">
+          <span className="hero-word" style={{ animationDelay: '.1s' }}>I&apos;m</span>{' '}
+          <em className="hero-word" style={{ animationDelay: '.26s' }}>Sydney</em>
+        </h1>
         <p className="hero-role">AI Automation Engineer · Manila, Philippines</p>
         <p className="hero-edu">BS Computer Science · University of the Philippines Manila</p>
         <p className="hero-desc">I build smart automation systems and AI tools that save businesses time and effort.</p>
@@ -212,8 +215,8 @@ export default function Page() {
         <div className="s-label" style={{ textAlign: 'center' }}>About</div>
         <div className="about-solo">
           <h2 className="s-title">Building systems that<br /><em>just work.</em></h2>
-          <p className="about-lead">I&apos;m Sydney Pua Ng — an AI Automation Engineer and BS Computer Science student at the University of the Philippines Manila. I design workflows and intelligent tools that eliminate repetitive tasks and let teams focus on what actually matters.</p>
-          <p className="about-lead">I&apos;m passionate about automation and actively looking for clients. If you have a process that needs automating or an idea you want to bring to life, I&apos;d love to help.</p>
+          <p className="about-lead">I&apos;m Sydney Pua Ng — an <strong>AI Automation Engineer</strong> and <strong>BS Computer Science</strong> student at the University of the Philippines Manila. I design workflows and intelligent tools that <strong>eliminate repetitive tasks</strong> and let teams focus on <strong>what actually matters.</strong></p>
+          <p className="about-lead">I&apos;m <strong>passionate about automation</strong> and <strong>actively looking for clients.</strong> If you have a process that needs automating or an idea you want to bring to life, I&apos;d love to help.</p>
           <div className="about-stats">
             <div className="astat"><strong>9+</strong><span>Projects built</span></div>
             <div className="astat"><strong>3</strong><span>Platforms mastered</span></div>
