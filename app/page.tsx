@@ -1,279 +1,254 @@
-'use client';
-
-import { useChat } from 'ai/react';
-import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Send, MapPin, Mail, ArrowLeft } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import Avatar from '@/components/Avatar';
-import ChatMessages from '@/components/ChatMessages';
-import SuggestionChips from '@/components/SuggestionChips';
-import ThemeToggle from '@/components/ThemeToggle';
+import Image from 'next/image';
+import Script from 'next/script';
 
-const MouseEffect = dynamic(() => import('@/components/MouseEffect'), { ssr: false });
+const CursorEffect = dynamic(() => import('@/components/CursorEffect'), { ssr: false });
+const ChatWidget = dynamic(() => import('@/components/ChatWidget'), { ssr: false });
+const ScrollReveal = dynamic(() => import('@/components/ScrollReveal'), { ssr: false });
 
-type AvatarState = 'idle' | 'thinking' | 'talking';
+const tools = [
+  { icon: '🤖', name: 'OpenAI' }, { icon: '⚡', name: 'Groq' },
+  { icon: '🔗', name: 'LangChain' }, { icon: '🔧', name: 'Make.com' },
+  { icon: '🌐', name: 'n8n' }, { icon: '⚙️', name: 'Zapier' },
+  { icon: '🚀', name: 'Next.js' }, { icon: '⚛️', name: 'React' },
+  { icon: '🐍', name: 'Python' }, { icon: '🗄️', name: 'Supabase' },
+  { icon: '📊', name: 'Airtable' }, { icon: '💬', name: 'Slack' },
+  { icon: '📋', name: 'Notion' }, { icon: '🎨', name: 'Canva' },
+  { icon: '📅', name: 'Calendly' }, { icon: '☁️', name: 'Vercel' },
+  { icon: '🐙', name: 'GitHub' }, { icon: '🔐', name: 'Webhooks' },
+];
 
 export default function Page() {
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
-  const [avatarState, setAvatarState] = useState<AvatarState>('idle');
-  const talkingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const { messages, input, handleInputChange, handleSubmit, isLoading, append, setMessages, error } =
-    useChat({
-      api: '/api/chat',
-      onError: (err) => console.error('[chat error]', err),
-    });
-
-  const hasMessages = messages.length > 0;
-
-  const handleReset = useCallback(() => {
-    setMessages([]);
-  }, [setMessages]);
-
-  // Sync avatar state
-  useEffect(() => {
-    if (talkingTimer.current) clearTimeout(talkingTimer.current);
-    if (isLoading) {
-      const lastMsg = messages[messages.length - 1];
-      setAvatarState(!lastMsg || lastMsg.role === 'user' ? 'thinking' : 'talking');
-    } else {
-      talkingTimer.current = setTimeout(() => setAvatarState('idle'), 1200);
-    }
-    return () => { if (talkingTimer.current) clearTimeout(talkingTimer.current); };
-  }, [isLoading, messages]);
-
-  // Auto-scroll
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
-
-  const handleChipSelect = useCallback(
-    (text: string) => { append({ role: 'user', content: text }); },
-    [append]
-  );
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
-    handleSubmit(e);
-  };
-
   return (
-    <div
-      className="relative flex flex-col min-h-[100dvh] overflow-hidden"
-      style={{ background: 'var(--bg)' }}
-    >
-      <MouseEffect />
+    <>
+      <CursorEffect />
+      <ScrollReveal />
 
-      {/* ── Header ── */}
-      <header
-        className="relative z-20 flex items-center justify-between px-5 py-4"
-        style={{ borderBottom: hasMessages ? '1px solid var(--border)' : 'none' }}
-      >
-        <AnimatePresence mode="wait">
-          {hasMessages ? (
-            <motion.div
-              key="chat-header"
-              className="flex items-center gap-2.5"
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -12 }}
-              transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-            >
-              {/* Back button */}
-              <motion.button
-                onClick={handleReset}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.92 }}
-                className="w-8 h-8 rounded-full flex items-center justify-center mr-1"
-                style={{
-                  background: 'var(--bg-3)',
-                  border: '1px solid var(--border)',
-                  color: 'var(--text-2)',
-                }}
-                aria-label="Back to home"
-              >
-                <ArrowLeft size={14} strokeWidth={2} />
-              </motion.button>
+      {/* Animated background */}
+      <div className="bg-canvas">
+        <div className="bg-orb" />
+        <div className="bg-orb" />
+        <div className="bg-orb" />
+      </div>
 
-              <Avatar state={avatarState} size="sm" />
-              <div>
-                <p className="text-sm font-semibold tracking-tight" style={{ color: 'var(--text)' }}>
-                  Sydney
-                </p>
-                <p className="text-[10px]" style={{ color: 'var(--accent)' }}>
-                  AI Automation Specialist
-                </p>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div key="empty" className="w-8" />
-          )}
-        </AnimatePresence>
-
-        <div className="ml-auto">
-          <ThemeToggle />
+      {/* NAV */}
+      <nav>
+        <a className="logo" href="#">SP.</a>
+        <ul className="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div className="nav-badge">
+          <div className="nav-dot" />
+          Open to work
         </div>
-      </header>
+      </nav>
 
-      {/* ── Main Content ── */}
-      <main className="relative z-10 flex-1 flex flex-col overflow-hidden">
-        {!hasMessages ? (
-          /* ── Landing view ── */
-          <motion.div
-            className="flex-1 flex flex-col items-center justify-center gap-6 px-5 pb-6 text-center"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.1, type: 'spring', stiffness: 200, damping: 22 }}
-            >
-              <Avatar state="idle" size="lg" />
-            </motion.div>
+      {/* HERO */}
+      <section id="hero">
+        <div className="avatar-wrap">
+          <div className="avatar-ring" />
+          <div className="avatar-img">
+            <Image
+              src="/avatar-frames/frame_0007.webp"
+              alt="Sydney"
+              width={120}
+              height={120}
+              priority
+              style={{ objectPosition: 'top' }}
+            />
+          </div>
+          <div className="status-dot" />
+        </div>
 
-            <motion.div
-              className="space-y-2"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.5 }}
-            >
-              <h1 className="heading-display">
-                Hey, I&apos;m Sydney{' '}
-                <span role="img" aria-label="wave">👋</span>
-              </h1>
-              <p className="text-base font-medium" style={{ color: 'var(--accent)' }}>
-                AI Automation Specialist
-              </p>
-              <div
-                className="flex items-center justify-center gap-3 text-xs mt-1"
-                style={{ color: 'var(--text-3)' }}
-              >
-                <span className="flex items-center gap-1">
-                  <MapPin size={11} strokeWidth={1.5} /> Manila, PH
-                </span>
-                <span className="flex items-center gap-1">
-                  <Mail size={11} strokeWidth={1.5} /> sydneykmpn@gmail.com
-                </span>
+        <div className="hero-tag">Open to work</div>
+        <h1 className="hero-name">I&apos;m <em>Sydney</em></h1>
+        <p className="hero-role">AI Automation Engineer · Manila, Philippines</p>
+        <p className="hero-desc">I build smart automation systems and AI tools that save businesses time and effort.</p>
+
+        <div className="hero-ctas">
+          <a href="#contact" className="btn-primary">Book a call →</a>
+          <a href="#projects" className="btn-outline">See my work</a>
+        </div>
+
+        <div className="scroll-cue" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>
+          <span>Scroll</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 5v14M5 12l7 7 7-7" />
+          </svg>
+        </div>
+      </section>
+
+      {/* TOOL MARQUEE */}
+      <div id="tools">
+        <p className="marquee-label">Tools &amp; Integrations</p>
+        <div style={{ overflow: 'hidden', display: 'flex' }}>
+          <div className="marquee-track" id="marqueeTrack">
+            {tools.map((t) => (
+              <div className="tool-pill" key={t.name}>
+                <div className="tool-icon">{t.icon}</div>
+                <span className="tool-name">{t.name}</span>
               </div>
-            </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <SuggestionChips onSelect={handleChipSelect} />
-            </motion.div>
-
-            <motion.form
-              onSubmit={onSubmit}
-              className="w-full max-w-xl"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <ChatInputField
-                input={input}
-                isLoading={isLoading}
-                onChange={handleInputChange}
-                inputRef={inputRef}
-                placeholder="Ask me about my projects, skills, or how I can automate your business…"
+      {/* ABOUT */}
+      <section className="section section-alt" id="about">
+        <div className="s-label">About</div>
+        <div className="about-grid">
+          <div className="about-text">
+            <h2 className="s-title">Building systems that<br /><em>just work.</em></h2>
+            <br />
+            <p>I&apos;m an AI Automation Engineer based in Manila, Philippines. I design workflows and intelligent tools that eliminate repetitive tasks and let teams focus on what actually matters.</p>
+            <p>I&apos;m passionate about automation and actively looking for clients. If you have a process that needs automating or an idea you want to bring to life, I&apos;d love to help.</p>
+            <br />
+            <a href="#contact" className="btn-primary">Get in touch →</a>
+          </div>
+          <div className="photo-frame">
+            <div className="photo-box">
+              <Image
+                src="/avatar-frames/frame_0007.webp"
+                alt="Sydney Puang"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'top', borderRadius: '20px' }}
               />
-            </motion.form>
-          </motion.div>
-        ) : (
-          /* ── Chat view ── */
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="flex-1 overflow-y-auto px-4 py-4">
-              <div className="max-w-2xl mx-auto">
-                <ChatMessages
-                  messages={messages.map(m => ({ id: m.id, role: m.role, content: m.content }))}
-                  isLoading={isLoading}
-                />
-
-                {/* API error banner */}
-                {error && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-3 px-4 py-3 rounded-xl text-xs"
-                    style={{
-                      background: 'rgba(239,68,68,0.08)',
-                      border: '1px solid rgba(239,68,68,0.2)',
-                      color: '#ef4444',
-                    }}
-                  >
-                    <strong>Error:</strong> {error.message || String(error)}
-                  </motion.div>
-                )}
-
-                <div ref={bottomRef} />
-              </div>
             </div>
-
-            <div
-              className="relative z-20 px-4 py-3"
-              style={{ borderTop: '1px solid var(--border)', background: 'var(--bg)' }}
-            >
-              <form onSubmit={onSubmit} className="max-w-2xl mx-auto">
-                <ChatInputField
-                  input={input}
-                  isLoading={isLoading}
-                  onChange={handleInputChange}
-                  inputRef={inputRef}
-                  placeholder="Ask me anything…"
-                />
-              </form>
+            <div className="loc-badge">
+              <strong>PH</strong>
+              <span>Manila</span>
             </div>
           </div>
-        )}
-      </main>
-    </div>
-  );
-}
+        </div>
+      </section>
 
-interface FieldProps {
-  input: string;
-  isLoading: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  inputRef: React.RefObject<HTMLInputElement>;
-  placeholder: string;
-}
+      {/* SKILLS */}
+      <section className="section" id="skills">
+        <div className="s-label">Skills</div>
+        <h2 className="s-title">What I do</h2>
+        <div className="skills-grid">
+          {[
+            { icon: '🤖', title: 'AI Integration', desc: 'Connecting LLMs and AI tools into real business workflows.', tags: ['OpenAI', 'Groq', 'LangChain'] },
+            { icon: '⚡', title: 'Workflow Automation', desc: 'Eliminating manual tasks with smart, end-to-end pipelines.', tags: ['Make', 'n8n', 'Zapier'] },
+            { icon: '🧠', title: 'Chatbot Development', desc: 'AI agents trained on your data for support and lead gen.', tags: ['RAG', 'Embeddings', 'Streaming'] },
+            { icon: '🔗', title: 'API & Integrations', desc: 'Connecting your tools so everything talks to each other.', tags: ['REST', 'Webhooks', 'Node.js'] },
+            { icon: '📊', title: 'Data Pipelines', desc: 'Collecting, cleaning, and surfacing data where it\'s needed.', tags: ['Supabase', 'PostgreSQL'] },
+            { icon: '🚀', title: 'Web Apps', desc: 'Fast, modern frontends and client portals built to ship.', tags: ['Next.js 15', 'React', 'Tailwind'] },
+          ].map((s) => (
+            <div className="skill-card" key={s.title}>
+              <div className="sk-icon">{s.icon}</div>
+              <h3>{s.title}</h3>
+              <p>{s.desc}</p>
+              <div className="skill-tags">{s.tags.map(t => <span className="stag" key={t}>{t}</span>)}</div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-function ChatInputField({ input, isLoading, onChange, inputRef, placeholder }: FieldProps) {
-  return (
-    <div
-      className="flex items-center gap-2 rounded-2xl px-3 py-2"
-      style={{
-        background: 'var(--bg-2)',
-        border: '1.5px solid var(--border)',
-        boxShadow: '0 2px 20px rgba(0,0,0,0.06)',
-      }}
-    >
-      <input
-        ref={inputRef}
-        value={input}
-        onChange={onChange}
-        placeholder={placeholder}
-        autoComplete="off"
-        className="flex-1 bg-transparent text-sm outline-none min-w-0 py-1"
-        style={{ color: 'var(--text)' }}
-        disabled={isLoading}
-      />
-      <motion.button
-        type="submit"
-        disabled={!input.trim() || isLoading}
-        className="send-btn"
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.93 }}
-      >
-        <Send size={14} strokeWidth={2} />
-      </motion.button>
-    </div>
+      {/* PROJECTS */}
+      <section className="section section-alt" id="projects">
+        <div className="s-label">Portfolio</div>
+        <h2 className="s-title">Projects</h2>
+        <div className="projects-grid">
+          {[
+            {
+              icon: '🤖', tags: ['Zapier', 'OpenAI'], title: 'AI Content Automation',
+              desc: 'Generates content from source files and auto-publishes across Facebook, LinkedIn, and Instagram — zero manual work.',
+              metrics: [{ val: '30hrs', label: 'Saved/week' }, { val: '3×', label: 'Platforms' }],
+            },
+            {
+              icon: '⚡', tags: ['Zapier', 'CRM', 'Asana'], title: 'CRM & Lead Pipeline',
+              desc: 'Full lead lifecycle automation with stage-based triggers, email sequences, and real-time Asana task creation.',
+              metrics: [{ val: '4×', label: 'Faster follow-up' }, { val: '0', label: 'Missed leads' }],
+            },
+            {
+              icon: '📊', tags: ['n8n', 'Webhooks', 'OpenAI'], title: 'AI Lead Outreach System',
+              desc: 'Real-time webhook lead intake with AI scoring, enrichment, and personalised outreach message generation.',
+              metrics: [{ val: 'Live', label: 'Processing' }, { val: 'AI', label: 'Personalised' }],
+            },
+          ].map((p) => (
+            <div className="proj-card" key={p.title}>
+              <div className="proj-thumb">
+                <div className="proj-ph-icon">{p.icon}</div>
+                <div className="proj-ph-label">Screenshot coming soon</div>
+              </div>
+              <div className="proj-body">
+                <div className="proj-tags">{p.tags.map(t => <span className="ptag" key={t}>{t}</span>)}</div>
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+                <div className="proj-metrics">
+                  {p.metrics.map(m => (
+                    <div className="metric" key={m.label}><strong>{m.val}</strong><span>{m.label}</span></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section className="section" id="contact">
+        <div className="s-label">Contact</div>
+        <div className="contact-grid">
+          <div>
+            <h2 className="contact-tagline">Let&apos;s work<br /><em>together</em></h2>
+            <p className="contact-desc">Open to freelance projects, collabs, and new opportunities. Drop a message or book a free 30-min call.</p>
+            {[
+              { icon: '✉️', label: 'Email', href: 'mailto:sydneykmpn@gmail.com', text: 'sydneykmpn@gmail.com' },
+              { icon: '💬', label: 'WhatsApp', href: 'https://wa.me/639177059448', text: '+63 917 705 9448' },
+              { icon: '💼', label: 'LinkedIn', href: 'https://www.linkedin.com/in/spuang/', text: 'linkedin.com/in/spuang' },
+              { icon: '📍', label: 'Location', href: null, text: 'Manila, Philippines (UTC+8)' },
+            ].map((c) => (
+              <div className="contact-item" key={c.label}>
+                <div className="c-icon">{c.icon}</div>
+                <div className="c-info">
+                  <small>{c.label}</small>
+                  {c.href
+                    ? <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">{c.text}</a>
+                    : <span>{c.text}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="cal-card">
+            <div className="cal-header">
+              <div className="cal-icon">📅</div>
+              <div><h3>Book a Free Call</h3><p>30 minutes — no commitment</p></div>
+            </div>
+            <div className="cal-body">
+              <div
+                className="calendly-inline-widget"
+                data-url="https://calendly.com/sydneykmpn/30min?hide_gdpr_banner=1&background_color=0e0c1a&text_color=e8e0f5&primary_color=a855f7"
+                style={{ minWidth: '280px', height: '600px' }}
+              />
+            </div>
+            <div className="cal-note">
+              Need to cancel? Check your Calendly confirmation email for the reschedule link.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer>
+        <small>© 2026 Sydney Puang</small>
+        <div className="foot-links">
+          <a href="mailto:sydneykmpn@gmail.com">Email</a>
+          <a href="https://www.linkedin.com/in/spuang/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://wa.me/639177059448" target="_blank" rel="noreferrer">WhatsApp</a>
+        </div>
+      </footer>
+
+      {/* Floating chat widget */}
+      <ChatWidget />
+
+      {/* Calendly script */}
+      <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
+    </>
   );
 }
