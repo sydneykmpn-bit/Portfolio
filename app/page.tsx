@@ -190,7 +190,7 @@ export default function Page() {
         <div className="avatar-wrap">
           <div className="avatar-ring" />
           <div className="avatar-img">
-            <Image src="/2x2.png" alt="Sydney" width={150} height={150} priority style={{ objectPosition: 'center 10%' }} />
+            <Image src="/2x2.png" alt="Sydney" width={200} height={200} priority style={{ objectPosition: 'center 10%' }} />
           </div>
           <div className="status-dot" />
         </div>
