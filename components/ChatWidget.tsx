@@ -2,7 +2,11 @@
 
 import { useState, useRef, useCallback, memo } from 'react';
 
-interface Msg { role: 'user' | 'assistant'; content: string }
+interface Msg {
+  role: 'user' | 'assistant';
+  content: string;
+  action?: { type: 'scroll_to'; target: string; label: string };
+}
 
 const QUICK = [
   "What do you do?",
@@ -11,12 +15,17 @@ const QUICK = [
   "How much are your rates?",
 ];
 
+// Intent patterns — checked client-side to inject scroll actions without
+// waiting for the AI to mention specific URLs or section names.
+const WORK_INTENT    = /work.?(with|together)|hire|collaborat|get.?started|get.?in.?touch|your services|how can i contact/i;
+const PROJECTS_INTENT = /show.?me|your projects|portfolio|what.*(built|made|created|done)|your work|see.*projects/i;
+
 function clean(raw: string) {
-  return raw.replace(/SHOW_PROJECTS/gi, '').replace(/[ \t]+/g, ' ').trim();
+  return raw.replace(/[ \t]+/g, ' ').trim();
 }
 
 const SPLIT_RE = /(https?:\/\/[^\s]+|[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g;
-const IS_URL = /^https?:\/\//;
+const IS_URL   = /^https?:\/\//;
 const IS_EMAIL = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
 function renderLine(line: string, lineKey: number) {
@@ -24,22 +33,10 @@ function renderLine(line: string, lineKey: number) {
   return (
     <span key={lineKey}>
       {parts.map((part, i) => {
-        if (IS_URL.test(part)) {
-          return (
-            <a key={i} href={part} target="_blank" rel="noreferrer"
-              style={{ color: 'var(--p1)', textDecoration: 'underline', wordBreak: 'break-all' }}>
-              {part}
-            </a>
-          );
-        }
-        if (IS_EMAIL.test(part)) {
-          return (
-            <a key={i} href={`mailto:${part}`}
-              style={{ color: 'var(--p1)', textDecoration: 'underline' }}>
-              {part}
-            </a>
-          );
-        }
+        if (IS_URL.test(part))
+          return <a key={i} href={part} target="_blank" rel="noreferrer" style={{ color: 'var(--p1)', textDecoration: 'underline', wordBreak: 'break-all' }}>{part}</a>;
+        if (IS_EMAIL.test(part))
+          return <a key={i} href={`mailto:${part}`} style={{ color: 'var(--p1)', textDecoration: 'underline' }}>{part}</a>;
         return part;
       })}
     </span>
@@ -47,7 +44,6 @@ function renderLine(line: string, lineKey: number) {
 }
 
 function MsgContent({ text }: { text: string }) {
-  // Split on any newline (single or double); also split long runs on sentence boundaries
   const raw = clean(text);
   const paragraphs = raw.split(/\n+/).map(p => p.trim()).filter(Boolean);
   if (paragraphs.length <= 1) return renderLine(raw, 0);
@@ -63,15 +59,15 @@ function MsgContent({ text }: { text: string }) {
 }
 
 export default memo(function ChatWidget() {
-  const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState<Msg[]>([
+  const [open, setOpen]   = useState(false);
+  const [msgs, setMsgs]   = useState<Msg[]>([
     { role: 'assistant', content: "Hey! Have a question about Sydney's work or want to get started? Ask me anything." }
   ]);
   const [input, setInput] = useState('');
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy]   = useState(false);
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const history = useRef<Msg[]>([]);
+  const history   = useRef<Msg[]>([]);
 
   const send = useCallback(async (text: string) => {
     if (!text.trim() || busy) return;
@@ -84,6 +80,9 @@ export default memo(function ChatWidget() {
     setMsgs(prev => [...prev, userMsg]);
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
 
+    const isWorkIntent    = WORK_INTENT.test(text);
+    const isProjectsIntent = PROJECTS_INTENT.test(text);
+
     try {
       const res = await fetch('/api/chat-widget', {
         method: 'POST',
@@ -92,10 +91,23 @@ export default memo(function ChatWidget() {
       });
       const data = await res.json();
       const reply = data.reply || 'Something went wrong — please try again later.';
-      const aiMsg: Msg = { role: 'assistant', content: reply };
+
+      const aiMsg: Msg = {
+        role: 'assistant',
+        content: reply,
+        // Inject "Connect with me" button for work-together intents
+        ...(isWorkIntent ? { action: { type: 'scroll_to' as const, target: 'contact', label: 'Connect with me' } } : {}),
+      };
       history.current.push(aiMsg);
       setTyping(false);
       setMsgs(prev => [...prev, aiMsg]);
+
+      // Auto-scroll to projects section for project-browsing intents
+      if (isProjectsIntent) {
+        setTimeout(() => {
+          document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      }
     } catch {
       setTyping(false);
       setMsgs(prev => [...prev, { role: 'assistant', content: 'Connection issue — please try again later.' }]);
@@ -111,13 +123,11 @@ export default memo(function ChatWidget() {
 
   return (
     <>
-      {/* FAB */}
       <button id="fab" onClick={() => setOpen(o => !o)} aria-label="Open chat">
         <div className="fab-ring" />
         💬
       </button>
 
-      {/* Panel */}
       {open && (
         <div id="chatPanel" className="open">
           <div className="cp-head">
@@ -133,6 +143,14 @@ export default memo(function ChatWidget() {
             {msgs.map((m, i) => (
               <div key={i} className={`cmsg ${m.role === 'user' ? 'user' : 'ai'}`}>
                 <MsgContent text={m.content} />
+                {m.action?.type === 'scroll_to' && (
+                  <button
+                    className="cmsg-action-btn"
+                    onClick={() => document.getElementById(m.action!.target)?.scrollIntoView({ behavior: 'smooth' })}
+                  >
+                    {m.action.label} →
+                  </button>
+                )}
               </div>
             ))}
             {typing && (
