@@ -32,12 +32,14 @@ const allProjects = [
     icon: '🤖', tags: ['Zapier', 'OpenAI'], title: 'AI Content Automation',
     desc: 'Generates content from source files and auto-publishes across Facebook, LinkedIn, and Instagram — zero manual work.',
     metrics: [{ val: '30hrs', label: 'Saved/week' }, { val: '3×', label: 'Platforms' }],
+    img: '/ai-content-repurposing.png',
   },
   {
     category: 'Zapier',
     icon: '⚡', tags: ['Zapier', 'CRM', 'Asana'], title: 'CRM & Lead Pipeline',
     desc: 'Full lead lifecycle automation with stage-based triggers, email sequences, and real-time Asana task creation.',
     metrics: [{ val: '4×', label: 'Faster follow-up' }, { val: '0', label: 'Missed leads' }],
+    img: '/zapier-expert-for-asana.png',
   },
   {
     category: 'Make',
