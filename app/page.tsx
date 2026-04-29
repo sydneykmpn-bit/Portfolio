@@ -303,8 +303,14 @@ export default function Page() {
           {visibleProjects.map((p) => (
             <div className="proj-card clickable-card" key={p.title} onClick={() => setModal({ type: 'project', data: p })}>
               <div className="proj-thumb">
-                <div className="proj-ph-icon">{p.icon}</div>
-                <div className="proj-ph-label">Screenshot coming soon</div>
+                {p.img ? (
+                  <Image src={p.img} alt={p.title} fill style={{ objectFit: 'cover' }} />
+                ) : (
+                  <>
+                    <div className="proj-ph-icon">{p.icon}</div>
+                    <div className="proj-ph-label">Screenshot coming soon</div>
+                  </>
+                )}
               </div>
               <div className="proj-body">
                 <div className="proj-tags">{p.tags.map(t => <span className="ptag" key={t}>{t}</span>)}</div>
