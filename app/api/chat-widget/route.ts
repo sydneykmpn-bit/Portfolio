@@ -35,9 +35,9 @@ export async function POST(req: Request) {
       }
     }
 
-    return Response.json({ reply: 'Something went wrong — email sydneykmpn@gmail.com directly!' }, { status: 500 });
+    return Response.json({ reply: 'Something went wrong — please try again later.' }, { status: 500 });
   } catch (err) {
     console.error('[chat-widget]', err);
-    return Response.json({ reply: 'Connection error. Try emailing sydneykmpn@gmail.com.' }, { status: 500 });
+    return Response.json({ reply: 'Connection error — please try again later.' }, { status: 500 });
   }
 }

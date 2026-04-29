@@ -4,10 +4,12 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
-const CursorEffect = dynamic(() => import('@/components/CursorEffect'), { ssr: false });
-const ChatWidget = dynamic(() => import('@/components/ChatWidget'), { ssr: false });
-const ScrollReveal = dynamic(() => import('@/components/ScrollReveal'), { ssr: false });
-const CardModal = dynamic(() => import('@/components/CardModal'), { ssr: false });
+const CursorEffect   = dynamic(() => import('@/components/CursorEffect'),    { ssr: false });
+const ChatWidget     = dynamic(() => import('@/components/ChatWidget'),       { ssr: false });
+const ScrollReveal   = dynamic(() => import('@/components/ScrollReveal'),     { ssr: false });
+const CardModal      = dynamic(() => import('@/components/CardModal'),        { ssr: false });
+const DraggableMarquee = dynamic(() => import('@/components/DraggableMarquee'), { ssr: false });
+const VideoModal     = dynamic(() => import('@/components/VideoModal'),       { ssr: false });
 
 import type { ModalPayload } from '@/components/CardModal';
 
@@ -72,18 +74,31 @@ const allProjects = [
     desc: 'Automated inquiry handling and appointment booking with intelligent scheduling logic and instant responses.',
     metrics: [{ val: '24/7', label: 'Booking' }, { val: '100%', label: 'Auto-response' }],
   },
+  {
+    category: 'RAG',
+    icon: '🧠', tags: ['RAG', 'Supabase', 'OpenAI'], title: 'RAG Knowledge Base Agent',
+    desc: 'Semantic search system — documents chunked, embedded into Supabase pgvector, and retrieved via OpenAI for accurate, source-grounded answers.',
+    metrics: [{ val: '<1s', label: 'Response time' }, { val: '95%+', label: 'Accuracy' }],
+  },
+  {
+    category: 'RAG',
+    icon: '🔍', tags: ['n8n', 'RAG', 'LangChain'], title: 'Multi-Source Research Agent',
+    desc: 'Autonomous AI agent combining web search, RAG retrieval, and LangChain reasoning to produce structured research reports on demand.',
+    metrics: [{ val: '100%', label: 'Automated' }, { val: 'Multi-source', label: 'Retrieval' }],
+  },
 ];
 
-const TABS = ['All', 'Zapier', 'Make', 'n8n', 'HighLevel'];
+const TABS = ['All', 'Zapier', 'Make', 'n8n', 'HighLevel', 'RAG'];
 
 export default function Page() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
   const [activeTab, setActiveTab] = useState('All');
   const [modal, setModal] = useState<ModalPayload | null>(null);
+  const [showVideos, setShowVideos] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    const initial = saved ?? 'dark';
+    const initial = saved ?? 'light';
     setTheme(initial);
     document.documentElement.setAttribute('data-theme', initial);
   }, []);
@@ -125,7 +140,7 @@ export default function Page() {
 
       {/* NAV */}
       <nav>
-        <a className="logo" href="#"><span className="logo-mark">SP</span></a>
+        <a className="logo" href="#"><span className="logo-mark">SKMPN</span></a>
         <div className="nav-group">
           <ul className="nav-links">
             <li><a href="#about">About</a></li>
@@ -174,7 +189,7 @@ export default function Page() {
           <span className="hero-word" style={{ animationDelay: '.1s' }}>I&apos;m</span>{' '}
           <em className="hero-word" style={{ animationDelay: '.26s' }}>Sydney</em>
         </h1>
-        <p className="hero-role">AI Automation Engineer · Manila, Philippines</p>
+        <p className="hero-role">Software Developer &amp; AI Automation Specialist · Manila, Philippines</p>
         <p className="hero-edu">BS Computer Science · University of the Philippines Manila</p>
         <p className="hero-desc">I build smart automation systems and AI tools that save businesses time and effort.</p>
 
@@ -194,16 +209,7 @@ export default function Page() {
       {/* TOOL MARQUEE */}
       <div id="tools">
         <p className="marquee-label">Tools &amp; Integrations</p>
-        <div style={{ overflow: 'hidden', display: 'flex' }}>
-          <div className="marquee-track" id="marqueeTrack">
-            {tools.map((t) => (
-              <div className="tool-pill" key={t.name}>
-                <div className="tool-icon">{t.icon}</div>
-                <span className="tool-name">{t.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <DraggableMarquee tools={tools} />
       </div>
 
       {/* ABOUT */}
@@ -211,10 +217,10 @@ export default function Page() {
         <div className="s-label" style={{ textAlign: 'center' }}>About</div>
         <div className="about-solo">
           <h2 className="s-title">Building systems that<br /><em>just work.</em></h2>
-          <p className="about-lead">I&apos;m Sydney Pua Ng — an <strong>AI Automation Engineer</strong> and <strong>BS Computer Science</strong> student at the University of the Philippines Manila. I design workflows and intelligent tools that <strong>eliminate repetitive tasks</strong> and let teams focus on <strong>what actually matters.</strong></p>
+          <p className="about-lead">I&apos;m Sydney Pua Ng — a <strong>Software Developer</strong> and <strong>AI Automation Specialist</strong> studying BS Computer Science at the University of the Philippines Manila. I design workflows and intelligent tools that <strong>eliminate repetitive tasks</strong> and let teams focus on <strong>what actually matters.</strong></p>
           <p className="about-lead">I&apos;m <strong>passionate about automation</strong> and <strong>actively looking for clients.</strong> If you have a process that needs automating or an idea you want to bring to life, I&apos;d love to help.</p>
           <div className="about-stats">
-            <div className="astat"><strong>9+</strong><span>Projects built</span></div>
+            <div className="astat"><strong>10+</strong><span>Projects built</span></div>
             <div className="astat"><strong>3</strong><span>Platforms mastered</span></div>
             <div className="astat"><strong>30hrs</strong><span>Saved per client/week</span></div>
             <div className="astat"><strong>24/7</strong><span>Automation uptime</span></div>
@@ -231,7 +237,7 @@ export default function Page() {
           {[
             { icon: '🤖', title: 'AI Integration', desc: 'Connecting LLMs and AI tools into real business workflows.', tags: ['OpenAI', 'Groq', 'LangChain'] },
             { icon: '⚡', title: 'Workflow Automation', desc: 'Eliminating manual tasks with smart, end-to-end pipelines.', tags: ['Make', 'n8n', 'Zapier'] },
-            { icon: '🧠', title: 'Chatbot Development', desc: 'AI agents trained on your data for support and lead gen.', tags: ['RAG', 'Embeddings', 'Streaming'] },
+            { icon: '🧠', title: 'RAG Pipelines', desc: 'Vector-powered knowledge retrieval — chunk, embed, retrieve, respond.', tags: ['RAG', 'Supabase', 'pgvector'] },
             { icon: '🔗', title: 'API & Integrations', desc: 'Connecting your tools so everything talks to each other.', tags: ['REST', 'Webhooks', 'Node.js'] },
             { icon: '📊', title: 'Data Pipelines', desc: 'Collecting, cleaning, and surfacing data where it\'s needed.', tags: ['Supabase', 'PostgreSQL'] },
             { icon: '🚀', title: 'Web Apps', desc: 'Fast, modern frontends and client portals built to ship.', tags: ['Next.js 15', 'React', 'Tailwind'] },
@@ -252,7 +258,13 @@ export default function Page() {
 
       {/* PROJECTS */}
       <section className="section section-alt" id="projects">
-        <div className="s-label">Portfolio</div>
+        <div className="proj-section-header">
+          <div className="s-label">Portfolio</div>
+          <button className="btn-demo" onClick={() => setShowVideos(true)}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Watch Video Demos
+          </button>
+        </div>
         <h2 className="s-title">Projects</h2>
         <div className="proj-tabs">
           {TABS.map(tab => (
@@ -297,23 +309,26 @@ export default function Page() {
         <div className="contact-grid">
           <div>
             <h2 className="contact-tagline">Let&apos;s work<br /><em>together</em></h2>
-            <p className="contact-desc">Open to freelance projects, collabs, and new opportunities. Drop a message or book a free 30-min call.</p>
-            {[
-              { icon: '✉️', label: 'Email', href: 'mailto:sydneykmpn@gmail.com', text: 'sydneykmpn@gmail.com' },
-              { icon: '💬', label: 'WhatsApp', href: 'https://wa.me/639177059448', text: '+63 917 705 9448' },
-              { icon: '💼', label: 'LinkedIn', href: 'https://www.linkedin.com/in/spuang/', text: 'linkedin.com/in/spuang' },
-              { icon: '📍', label: 'Location', href: null, text: 'Manila, Philippines (UTC+8)' },
-            ].map((c) => (
-              <div className="contact-item" key={c.label}>
-                <div className="c-icon">{c.icon}</div>
-                <div className="c-info">
-                  <small>{c.label}</small>
-                  {c.href
-                    ? <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">{c.text}</a>
-                    : <span>{c.text}</span>}
-                </div>
+            <p className="contact-desc">Open to freelance projects, collabs, and new opportunities. Reach out directly — I typically respond within 24 hours.</p>
+
+            <div className="contact-ctas">
+              <a href="mailto:sydneykmpn@gmail.com" className="btn-contact btn-gmail">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                Gmail
+              </a>
+              <a href="https://wa.me/639177059448" target="_blank" rel="noreferrer" className="btn-contact btn-whatsapp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                WhatsApp
+              </a>
+            </div>
+
+            <div className="contact-item" style={{ marginTop: '2rem' }}>
+              <div className="c-icon">📍</div>
+              <div className="c-info">
+                <small>Location</small>
+                <span>Manila, Philippines (UTC+8)</span>
               </div>
-            ))}
+            </div>
           </div>
 
           <div className="cal-card">
@@ -343,13 +358,16 @@ export default function Page() {
         <small>© 2026 Sydney Pua Ng</small>
         <div className="foot-links">
           <a href="mailto:sydneykmpn@gmail.com">Email</a>
-          <a href="https://www.linkedin.com/in/spuang/" target="_blank" rel="noreferrer">LinkedIn</a>
           <a href="https://wa.me/639177059448" target="_blank" rel="noreferrer">WhatsApp</a>
+          <a href="https://www.linkedin.com/in/spuang/" target="_blank" rel="noreferrer">LinkedIn</a>
         </div>
       </footer>
 
       {/* Card modal */}
       {modal && <CardModal modal={modal} onClose={() => setModal(null)} />}
+
+      {/* Video demo modal */}
+      {showVideos && <VideoModal onClose={() => setShowVideos(false)} />}
 
       {/* Floating chat widget */}
       <ChatWidget />

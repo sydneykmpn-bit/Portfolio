@@ -91,14 +91,14 @@ export default memo(function ChatWidget() {
         body: JSON.stringify({ messages: history.current }),
       });
       const data = await res.json();
-      const reply = data.reply || 'Something went wrong — email sydneykmpn@gmail.com directly.';
+      const reply = data.reply || 'Something went wrong — please try again later.';
       const aiMsg: Msg = { role: 'assistant', content: reply };
       history.current.push(aiMsg);
       setTyping(false);
       setMsgs(prev => [...prev, aiMsg]);
     } catch {
       setTyping(false);
-      setMsgs(prev => [...prev, { role: 'assistant', content: 'Connection issue — email sydneykmpn@gmail.com directly.' }]);
+      setMsgs(prev => [...prev, { role: 'assistant', content: 'Connection issue — please try again later.' }]);
     }
 
     setBusy(false);

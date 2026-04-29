@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Sydney Pua Ng — AI Automation Engineer',
-  description: 'AI Automation Engineer based in Manila, PH. I build smart automation systems and AI tools that save businesses time and effort.',
-  keywords: ['AI automation', 'Zapier', 'n8n', 'Make', 'workflow', 'Tech VA', 'Philippines'],
+  title: 'SKMPN — Software Developer & AI Automation Specialist',
+  description: 'Software Developer & AI Automation Specialist based in Manila, PH. Building smart automation systems, RAG pipelines, and AI tools that save businesses time.',
+  keywords: ['AI automation', 'software developer', 'RAG pipeline', 'Zapier', 'n8n', 'Make', 'workflow', 'Philippines'],
   openGraph: {
-    title: 'Sydney Puang — AI Automation Engineer',
-    description: 'Building smart automation systems and AI tools that help businesses scale.',
+    title: 'SKMPN — Software Developer & AI Automation Specialist',
+    description: 'Building smart automation systems, RAG pipelines, and AI tools that help businesses scale.',
     type: 'website',
   },
 };
