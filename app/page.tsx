@@ -137,9 +137,13 @@ export default function Page() {
     const message = fd.get('message') as string;
     const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
     const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-    window.location.href = `mailto:sydneykmpn@gmail.com?subject=${subject}&body=${body}`;
+    const a = document.createElement('a');
+    a.href = `mailto:sydneykmpn@gmail.com?subject=${subject}&body=${body}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     setFormSent(true);
-    setTimeout(() => setFormSent(false), 5000);
+    setTimeout(() => setFormSent(false), 6000);
   };
 
   const visibleProjects = activeTab === 'All' ? allProjects : allProjects.filter(p => p.category === activeTab);
@@ -348,10 +352,8 @@ export default function Page() {
               <iframe
                 src={calendlyUrl}
                 width="100%"
-                height="620"
                 frameBorder="0"
                 title="Book a call with Sydney"
-                style={{ display: 'block' }}
               />
             </div>
           </div>
@@ -364,7 +366,7 @@ export default function Page() {
               <h3 className="form-card-title">Send a Message</h3>
               {formSent ? (
                 <div className="form-success">
-                  Your mail client just opened. See you soon!
+                  Your mail client should have opened. If not, email directly: <a href="mailto:sydneykmpn@gmail.com" style={{ color: '#22c55e' }}>sydneykmpn@gmail.com</a>
                 </div>
               ) : (
                 <form className="contact-form" onSubmit={handleContactSubmit}>

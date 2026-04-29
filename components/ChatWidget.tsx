@@ -59,7 +59,8 @@ function MsgContent({ text }: { text: string }) {
 }
 
 export default memo(function ChatWidget() {
-  const [open, setOpen]   = useState(false);
+  const [open, setOpen]       = useState(false);
+  const [enlarged, setEnlarged] = useState(false);
   const [msgs, setMsgs]   = useState<Msg[]>([
     { role: 'assistant', content: "Hey! Have a question about Sydney's work or want to get started? Ask me anything." }
   ]);
@@ -129,14 +130,27 @@ export default memo(function ChatWidget() {
       </button>
 
       {open && (
-        <div id="chatPanel" className="open">
+        <div id="chatPanel" className={`open${enlarged ? ' enlarged' : ''}`}>
           <div className="cp-head">
             <div className="cp-av">S</div>
             <div className="cp-head-info">
               <h4>Sydney&apos;s AI</h4>
               <small>Online — ask me anything</small>
             </div>
-            <button className="cp-x" onClick={() => setOpen(false)}>✕</button>
+            <div className="cp-head-actions">
+              <button className="cp-expand" onClick={() => setEnlarged(e => !e)} aria-label={enlarged ? 'Minimize chat' : 'Expand chat'}>
+                {enlarged ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M8 3v3a2 2 0 0 1-2 2H3M21 3h-3a2 2 0 0 1-2 2v3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/>
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                  </svg>
+                )}
+              </button>
+              <button className="cp-x" onClick={() => { setOpen(false); setEnlarged(false); }}>✕</button>
+            </div>
           </div>
 
           <div className="cp-msgs">

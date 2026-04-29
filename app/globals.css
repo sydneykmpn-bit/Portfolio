@@ -184,12 +184,13 @@ h1.hero-name em{background:var(--grad);-webkit-background-clip:text;-webkit-text
 .connect-right{display:flex;flex-direction:column;gap:1.2rem;}
 
 /* Calendly card */
-.cal-card{border-radius:18px;overflow:hidden;border:1px solid var(--bdr);box-shadow:var(--glow);}
-.cal-header{background:var(--bg3);padding:1rem 1.2rem;display:flex;align-items:center;gap:.85rem;border-bottom:1px solid var(--bdr);}
+.cal-card{border-radius:18px;overflow:hidden;border:1px solid var(--bdr);box-shadow:var(--glow);display:flex;flex-direction:column;}
+.cal-header{background:var(--bg3);padding:1rem 1.2rem;display:flex;align-items:center;gap:.85rem;border-bottom:1px solid var(--bdr);flex-shrink:0;}
 .cal-icon{width:42px;height:42px;border-radius:11px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
 .cal-header h3{font-family:'Syne',sans-serif;font-size:.93rem;font-weight:700;}
 .cal-header p{color:var(--muted);font-size:.77rem;margin-top:.08rem;}
-.cal-body{background:#fff;}
+.cal-body{background:#fff;overflow:hidden;max-height:500px;}
+.cal-body iframe{display:block;width:100%;height:500px;}
 
 /* Contact form card */
 .form-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem;}
@@ -233,8 +234,13 @@ footer small{color:var(--muted);font-size:.77rem;}
 .cp-head-info h4{font-family:'Syne',sans-serif;font-size:.86rem;font-weight:700;}
 .cp-head-info small{color:var(--p1);font-size:.7rem;display:flex;align-items:center;gap:.3rem;}
 .cp-head-info small::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--p1);flex-shrink:0;animation:blink 2s infinite;}
-.cp-x{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;transition:color .2s;padding:.15rem;}
+.cp-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.05rem;transition:color .2s;padding:.15rem;}
 .cp-x:hover{color:var(--text);}
+.cp-head-actions{margin-left:auto;display:flex;align-items:center;gap:.25rem;}
+.cp-expand{background:none;border:none;color:var(--muted);cursor:pointer;padding:.15rem;display:flex;align-items:center;justify-content:center;transition:color .2s;}
+.cp-expand:hover{color:var(--text);}
+#chatPanel.enlarged{width:min(80vw,900px);max-height:80vh;bottom:auto;right:auto;top:50%;left:50%;transform:translate(-50%,-50%);}
+#chatPanel.enlarged .cp-msgs{max-height:calc(80vh - 220px);}
 .cp-msgs{flex:1;overflow-y:auto;padding:.95rem;display:flex;flex-direction:column;gap:.75rem;min-height:180px;max-height:330px;}
 .cp-msgs::-webkit-scrollbar{width:3px;}
 .cp-msgs::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:3px;}
@@ -297,15 +303,13 @@ footer small{color:var(--muted);font-size:.77rem;}
 .modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1.5rem;animation:mFade .2s ease;}
 @keyframes mFade{from{opacity:0}to{opacity:1}}
 .modal-box{background:var(--bg2);border:1px solid var(--bdr2);border-radius:22px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.65),var(--glow);animation:mPop .22s ease;}
-.proj-modal{max-width:580px;}
+.proj-modal{max-width:860px;}
 .skill-modal{max-width:420px;}
 @keyframes mPop{from{opacity:0;transform:scale(.93) translateY(16px)}to{opacity:1;transform:none}}
 .modal-close{position:absolute;top:.9rem;right:.9rem;width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);cursor:pointer;color:var(--muted);font-size:.85rem;display:flex;align-items:center;justify-content:center;z-index:2;transition:background .15s,color .15s;}
 .modal-close:hover{background:rgba(168,85,247,.18);color:var(--text);}
 .modal-thumb{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,var(--bg3),var(--bg4));border-radius:20px 20px 0 0;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;}
-.modal-thumb img{transition:transform .35s ease;}
-.modal-thumb.zoomed img{transform:scale(1.6);}
-.modal-zoom-hint{position:absolute;bottom:.6rem;right:.75rem;font-size:.65rem;color:rgba(255,255,255,.5);background:rgba(0,0,0,.35);padding:.18rem .5rem;border-radius:100px;letter-spacing:.04em;}
+.modal-img-full{width:100%;background:var(--bg);border-radius:20px 20px 0 0;overflow:hidden;}
 .modal-ph-icon{width:68px;height:68px;border-radius:16px;background:rgba(168,85,247,.1);border:1px dashed rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;font-size:1.8rem;}
 .modal-ph-label{color:var(--muted);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;}
 .modal-body{padding:1.5rem 1.5rem 1.75rem;}
@@ -321,7 +325,7 @@ footer small{color:var(--muted);font-size:.77rem;}
 .btn-demo:hover{background:rgba(168,85,247,.2);border-color:var(--p1);}
 
 /* ── CONTACT CTA BUTTONS ── */
-.contact-ctas{display:flex;gap:.85rem;flex-wrap:wrap;margin-top:1.8rem;}
+.contact-ctas{display:flex;gap:.85rem;flex-wrap:wrap;position:relative;z-index:2;}
 .btn-contact{display:inline-flex;align-items:center;gap:.55rem;padding:.85rem 1.6rem;border-radius:10px;text-decoration:none;font-weight:700;font-family:'Syne',sans-serif;font-size:.87rem;transition:opacity .2s,transform .2s;border:none;cursor:pointer;}
 .btn-contact:hover{opacity:.88;transform:translateY(-2px);}
 .btn-gmail{background:#ea4335;color:#fff;}

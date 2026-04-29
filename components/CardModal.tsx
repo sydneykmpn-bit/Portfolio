@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import Image from 'next/image';
 
 export type ProjectData = {
@@ -25,8 +25,6 @@ export type ModalPayload =
   | { type: 'skill'; data: SkillData };
 
 export default function CardModal({ modal, onClose }: { modal: ModalPayload; onClose: () => void }) {
-  const [zoomed, setZoomed] = useState(false);
-
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', onKey);
@@ -64,23 +62,16 @@ export default function CardModal({ modal, onClose }: { modal: ModalPayload; onC
       <div className="modal-box proj-modal" onClick={stopProp}>
         <button className="modal-close" onClick={onClose}>✕</button>
 
-        <div
-          className={`modal-thumb${zoomed ? ' zoomed' : ''}`}
-          onClick={() => p.img ? setZoomed(z => !z) : undefined}
-          style={{ cursor: p.img ? (zoomed ? 'zoom-out' : 'zoom-in') : 'default' }}
-        >
-          {p.img ? (
-            <Image src={p.img} alt={p.title} fill style={{ objectFit: 'cover', transition: 'transform .35s ease' }} />
-          ) : (
-            <>
-              <div className="modal-ph-icon">{p.icon}</div>
-              <span className="modal-ph-label">Screenshot coming soon</span>
-            </>
-          )}
-          {p.img && (
-            <span className="modal-zoom-hint">{zoomed ? 'Click to zoom out' : 'Click to zoom in'}</span>
-          )}
-        </div>
+        {p.img ? (
+          <div className="modal-img-full">
+            <Image src={p.img} alt={p.title} width={860} height={540} style={{ width: '100%', height: 'auto', display: 'block' }} sizes="(max-width:900px) 100vw, 860px" />
+          </div>
+        ) : (
+          <div className="modal-thumb">
+            <div className="modal-ph-icon">{p.icon}</div>
+            <span className="modal-ph-label">Screenshot coming soon</span>
+          </div>
+        )}
 
         <div className="modal-body">
           <div className="proj-tags" style={{ marginBottom: '.75rem' }}>
