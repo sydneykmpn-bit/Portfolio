@@ -158,7 +158,7 @@ export default function Page() {
   };
 
   const visibleProjects = activeTab === 'All' ? allProjects : allProjects.filter(p => p.category === activeTab);
-  const calendlyUrl = 'https://calendly.com/sydneykmpn/30min?hide_gdpr_banner=1&primary_color=a855f7';
+  const calendlyUrl = 'https://calendly.com/sydneykmpn/30min?hide_gdpr_banner=1&primary_color=3b82f6';
 
   return (
     <>
