@@ -109,7 +109,12 @@ export default function Page() {
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    const initial = saved ?? 'light';
+    let initial: 'dark' | 'light';
+    if (saved === 'dark' || saved === 'light') {
+      initial = saved;
+    } else {
+      initial = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
     setTheme(initial);
     document.documentElement.setAttribute('data-theme', initial);
   }, []);
