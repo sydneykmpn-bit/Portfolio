@@ -52,12 +52,14 @@ const allProjects = [
     icon: '📧', tags: ['Make', 'Gmail', 'Drive'], title: 'Email & File Automation',
     desc: 'Intelligent email attachment router — incoming emails parsed, attachments sorted, and files routed automatically.',
     metrics: [{ val: '90%', label: 'Less manual work' }, { val: '0', label: 'Manual sorting' }],
+    img: '/Auto_Sort_Gmail_Attachments_on_Drive.png',
   },
   {
     category: 'n8n',
     icon: '📊', tags: ['n8n', 'Webhooks', 'OpenAI'], title: 'AI Lead Outreach System',
     desc: 'Real-time webhook lead intake with AI scoring, enrichment, and personalised outreach message generation.',
     metrics: [{ val: 'Live', label: 'Processing' }, { val: 'AI', label: 'Personalised' }],
+    img: '/leads-enrichment.png',
   },
   {
     category: 'n8n',
