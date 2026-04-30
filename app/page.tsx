@@ -106,6 +106,7 @@ export default function Page() {
   const [showVideos, setShowVideos] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [formError, setFormError] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
@@ -118,6 +119,11 @@ export default function Page() {
     setTheme(initial);
     document.documentElement.setAttribute('data-theme', initial);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -197,9 +203,28 @@ export default function Page() {
                 </svg>
               )}
             </button>
+            <button className="hamburger" onClick={() => setMenuOpen(true)} aria-label="Open navigation">
+              <span /><span /><span />
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* MOBILE MENU */}
+      {menuOpen && (
+        <div className="mob-overlay" onClick={() => setMenuOpen(false)}>
+          <div className="mob-panel" onClick={e => e.stopPropagation()}>
+            <button className="mob-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">✕</button>
+            <p className="mob-label">Navigation</p>
+            <ul className="mob-links">
+              <li><a href="#about"    onClick={() => setMenuOpen(false)}>About<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#skills"   onClick={() => setMenuOpen(false)}>Skills<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#projects" onClick={() => setMenuOpen(false)}>Projects<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#contact"  onClick={() => setMenuOpen(false)}>Connect<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+            </ul>
+          </div>
+        </div>
+      )}
 
       {/* HERO */}
       <section id="hero">
