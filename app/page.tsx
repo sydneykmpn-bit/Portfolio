@@ -351,7 +351,7 @@ export default function Page() {
       <section className="section" id="contact">
         <div className="s-label">Connect</div>
         <h2 className="s-title">Let&apos;s build something that<br /><em>pays for itself.</em></h2>
-        <p className="connect-sub">Most clients recover the cost within the first week. If your team repeats a task more than twice a day — I can automate it. Book a free 30-minute call and I&apos;ll audit one of your workflows on the spot.</p>
+        <p className="connect-sub">Most clients recover the cost within the first week. If your team repeats a task more than twice a day — I can automate it. Book a free 30-minute call.</p>
 
         <div className="connect-grid">
 
@@ -361,7 +361,7 @@ export default function Page() {
               <div className="cal-icon">📅</div>
               <div>
                 <h3>Book a Free Strategy Call</h3>
-                <p>30 min · I&apos;ll audit one of your workflows live</p>
+                <p>30 min</p>
               </div>
             </div>
             <div className="cal-body">
