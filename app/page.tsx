@@ -30,22 +30,22 @@ const allProjects = [
   {
     category: 'Zapier',
     icon: '🤖', tags: ['Zapier', 'OpenAI'], title: 'AI Content Automation',
-    desc: 'Generates content from source files and auto-publishes across Facebook and Instagram — zero manual work.',
-    metrics: [{ val: '30hrs', label: 'Saved/week' }, { val: '3×', label: 'Platforms' }],
+    desc: 'Client was manually writing and scheduling posts daily. Now source files flow into AI, get formatted as platform-specific content, and publish to Facebook and Instagram automatically — zero human touch.',
+    metrics: [{ val: '30hrs', label: 'Saved/week' }, { val: '3×', label: 'Output volume' }],
     img: '/ai-content-repurposing.png',
   },
   {
     category: 'Zapier',
     icon: '⚡', tags: ['Zapier', 'CRM', 'Asana'], title: 'CRM & Lead Pipeline',
-    desc: 'Full lead lifecycle automation with stage-based triggers, email sequences, and real-time Asana task creation.',
+    desc: 'Sales team was manually moving leads through stages, writing follow-up emails, and creating tasks by hand. Built a pipeline where every CRM stage change triggers the right email sequence and creates Asana tasks in real time — no one falls through the cracks.',
     metrics: [{ val: '4×', label: 'Faster follow-up' }, { val: '0', label: 'Missed leads' }],
     img: '/zapier-expert-for-asana.png',
   },
   {
     category: 'Zapier',
     icon: '🎯', tags: ['Zapier', 'CRM', 'Gmail', 'Webhooks'], title: 'Leads Enrichment & Routing Pipeline',
-    desc: 'Catches form submissions via webhook, formats data, and routes high-priority leads to Google Sheets with personalised Gmail follow-ups — automatically.',
-    metrics: [{ val: '2×', label: 'Lead paths' }, { val: '100%', label: 'Auto-routed' }],
+    desc: 'High-value leads were getting the same generic response as low-intent inquiries. Built a webhook pipeline that scores each submission, routes hot leads to a priority Sheet, and fires a personalised Gmail follow-up — under 60 seconds from form submission.',
+    metrics: [{ val: '<60s', label: 'Response time' }, { val: '100%', label: 'Auto-routed' }],
     img: '/leads-enrichment.png',
   },
   /* TODO: add thumbnail before uncommenting
@@ -59,7 +59,7 @@ const allProjects = [
   {
     category: 'Make',
     icon: '🗂️', tags: ['Make', 'Google Drive', 'AI Analysis', 'Gmail'], title: 'Smart Drive Auto-Sorter',
-    desc: 'Watches Gmail for incoming attachments, uses AI to analyse and rename files, uploads them to structured Drive folders, logs each entry to a spreadsheet, and sends a notification.',
+    desc: 'Team was spending hours a week downloading, renaming, and filing email attachments by hand. Now every incoming attachment is caught, renamed by AI based on content, sorted into the correct Drive folder, logged to a spreadsheet, and confirmed — automatically.',
     metrics: [{ val: '0', label: 'Manual sorting' }, { val: 'AI', label: 'File naming' }],
     img: '/Auto_Sort_Gmail_Attachments_on_Drive.png',
   },
@@ -206,17 +206,17 @@ export default function Page() {
           <div className="status-dot" />
         </div>
 
-        <div className="hero-tag">Open to work</div>
+        <div className="hero-tag">Available for new projects</div>
         <h1 className="hero-name">
           <span className="hero-word" style={{ animationDelay: '.1s' }}>I&apos;m</span>{' '}
           <em className="hero-word" style={{ animationDelay: '.26s' }}>Sydney</em>
         </h1>
-        <p className="hero-role">Software Developer &amp; AI Automation Specialist · Manila, Philippines</p>
-        <p className="hero-desc">I build smart automation systems and AI tools that save businesses time and effort.</p>
+        <p className="hero-role">AI Automation Engineer · Software Developer · Manila, PH</p>
+        <p className="hero-desc">I build automation systems that eliminate manual work — so your team moves faster, responds in seconds, and scales without adding headcount.</p>
 
         <div className="hero-ctas">
-          <a href="#contact" className="btn-primary">Book a call →</a>
-          <a href="#projects" className="btn-outline">See my work</a>
+          <a href="#contact" className="btn-primary">Book a free call →</a>
+          <a href="#projects" className="btn-outline">See case studies</a>
         </div>
 
         <div className="scroll-cue" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -229,7 +229,7 @@ export default function Page() {
 
       {/* TOOL MARQUEE */}
       <div id="tools">
-        <p className="marquee-label">Tools &amp; Integrations</p>
+        <p className="marquee-label">Stack &amp; Integrations</p>
         <DraggableMarquee tools={tools} />
       </div>
 
@@ -237,54 +237,54 @@ export default function Page() {
       <section className="section section-alt" id="about" style={{ textAlign: 'center' }}>
         <div className="s-label" style={{ textAlign: 'center' }}>About</div>
         <div className="about-solo">
-          <h2 className="s-title">Building systems that<br /><em>just work.</em></h2>
-          <p className="about-lead">I&apos;m Sydney Pua Ng — a <strong>Software Developer</strong> and <strong>AI Automation Specialist</strong> with a strong foundation in computer science, systems programming, and AI-driven workflow design. I build intelligent tools that <strong>eliminate repetitive tasks</strong> and let teams focus on <strong>what actually matters.</strong></p>
-          <p className="about-lead">I&apos;m <strong>passionate about automation</strong> and <strong>actively looking for clients.</strong> If you have a process that needs automating or an idea you want to bring to life, I&apos;d love to help.</p>
+          <h2 className="s-title">Your team shouldn&apos;t be<br /><em>doing this manually.</em></h2>
+          <p className="about-lead">I&apos;m Sydney Pua Ng — an <strong>AI Automation Engineer</strong> and <strong>Software Developer</strong> based in Manila. I specialise in building production-grade systems that connect your tools, kill the bottlenecks, and give your team back hours every single week.</p>
+          <p className="about-lead">Whether it&apos;s slow lead follow-up, repetitive data entry, or a workflow held together with copy-paste — I design the automation that <strong>fixes it permanently.</strong> I&apos;m actively taking on clients.</p>
           <div className="about-stats">
-            <div className="astat"><strong>10+</strong><span>Projects built</span></div>
-            <div className="astat"><strong>3</strong><span>Platforms mastered</span></div>
-            <div className="astat"><strong>30hrs</strong><span>Saved per client/week</span></div>
-            <div className="astat"><strong>24/7</strong><span>Automation uptime</span></div>
+            <div className="astat"><strong>10+</strong><span>Systems shipped</span></div>
+            <div className="astat"><strong>30hrs+</strong><span>Saved per client/week</span></div>
+            <div className="astat"><strong>4</strong><span>Automation platforms</span></div>
+            <div className="astat"><strong>24/7</strong><span>Runs without you</span></div>
           </div>
-          <a href="#contact" className="btn-primary">Get in touch →</a>
+          <a href="#contact" className="btn-primary">Start the conversation →</a>
         </div>
       </section>
 
       {/* SKILLS */}
       <section className="section" id="skills">
         <div className="s-label">Skills</div>
-        <h2 className="s-title">What I do</h2>
+        <h2 className="s-title">How I solve it</h2>
         <div className="skills-grid">
           {[
             {
-              icon: '🖥️', title: 'Frontend Development',
-              desc: 'Building responsive, performant UIs with modern tooling and clean component architecture.',
-              tags: ['React', 'HTML', 'CSS', 'JavaScript'],
+              icon: '🤖', title: 'Workflow Automation',
+              desc: 'End-to-end automation across Zapier, Make, and n8n — connecting your apps, eliminating bottlenecks, and running 24/7 without manual intervention.',
+              tags: ['Zapier', 'Make.com', 'n8n', 'Webhooks'],
             },
             {
-              icon: '⚙️', title: 'Backend & Languages',
-              desc: 'Systems and application development across the full language stack — from low-level to high-level.',
-              tags: ['C++', 'C', 'Python', 'Java', 'C#', 'SQL', 'Django'],
+              icon: '🧠', title: 'AI Knowledge Systems',
+              desc: 'RAG pipelines that let your team query internal documents, client data, and knowledge bases in plain language — with source-grounded answers.',
+              tags: ['RAG', 'OpenAI', 'pgvector', 'LangChain', 'Supabase'],
             },
             {
-              icon: '🤖', title: 'AI & Automation',
-              desc: 'Connecting LLMs, voice AI, and automation platforms into production-grade systems.',
-              tags: ['OpenAI', 'VAPI', 'Make.com', 'n8n', 'Zapier'],
+              icon: '🗄️', title: 'Integrations & APIs',
+              desc: 'REST APIs, webhooks, and database connectors that make every tool in your stack talk to each other — no more copy-pasting between systems.',
+              tags: ['PostgreSQL', 'Supabase', 'REST', 'Webhooks', 'Airtable'],
             },
             {
-              icon: '🧠', title: 'RAG Pipelines',
-              desc: 'Vector-powered knowledge retrieval — chunk, embed, retrieve, respond with source-grounded accuracy.',
-              tags: ['RAG', 'pgvector', 'LangChain', 'Supabase'],
+              icon: '🖥️', title: 'Client Portals & UIs',
+              desc: 'Custom dashboards and admin interfaces built with React — clean, fast, and designed to surface exactly what your team needs.',
+              tags: ['React', 'Next.js', 'Tailwind', 'Vercel'],
             },
             {
-              icon: '🗄️', title: 'Databases & APIs',
-              desc: 'Designing robust data layers and stitching everything together through clean API contracts.',
-              tags: ['PostgreSQL', 'Supabase', 'REST', 'Webhooks'],
+              icon: '⚙️', title: 'Backend & Scripting',
+              desc: 'Automation glue code, data transformation scripts, and custom APIs that handle the logic your no-code tools cannot.',
+              tags: ['Python', 'Django', 'SQL', 'C++', 'Java'],
             },
             {
-              icon: '🚀', title: 'Web Apps',
-              desc: 'Fast, modern full-stack apps and client portals built to ship — not sit in staging.',
-              tags: ['Next.js', 'React', 'Tailwind', 'Vercel'],
+              icon: '📞', title: 'AI Voice Agents',
+              desc: 'Voice AI workflows with VAPI that handle inbound calls, qualify leads, and book appointments — without a human on the line.',
+              tags: ['VAPI', 'OpenAI', 'n8n', 'Webhooks'],
             },
           ].map((s) => (
             <div className="skill-card clickable-card" key={s.title} onClick={() => setModal({ type: 'skill', data: s })}>
@@ -306,7 +306,7 @@ export default function Page() {
             Watch Video Demos
           </button>
         </div>
-        <h2 className="s-title">Projects</h2>
+        <h2 className="s-title">Case Studies</h2>
         <div className="proj-tabs">
           {TABS.map(tab => (
             <button key={tab} className={`ptab${activeTab === tab ? ' active' : ''}`} onClick={() => setActiveTab(tab)}>
@@ -345,8 +345,8 @@ export default function Page() {
       {/* CONNECT */}
       <section className="section" id="contact">
         <div className="s-label">Connect</div>
-        <h2 className="s-title">Let&apos;s work <em>together</em></h2>
-        <p className="connect-sub">Available for freelance projects, long-term contracts, and strategic collabs. Pick what works for you.</p>
+        <h2 className="s-title">Let&apos;s build something that<br /><em>pays for itself.</em></h2>
+        <p className="connect-sub">Most clients recover the cost within the first week. If your team repeats a task more than twice a day — I can automate it. Book a free 30-minute call and I&apos;ll audit one of your workflows on the spot.</p>
 
         <div className="connect-grid">
 
@@ -356,7 +356,7 @@ export default function Page() {
               <div className="cal-icon">📅</div>
               <div>
                 <h3>Book a Free Strategy Call</h3>
-                <p>30 minutes — no commitment</p>
+                <p>30 min · I&apos;ll audit one of your workflows live</p>
               </div>
             </div>
             <div className="cal-body">
@@ -413,7 +413,7 @@ export default function Page() {
               <div className="resume-icon">📄</div>
               <div className="resume-info">
                 <strong>Resume</strong>
-                <span>Software Developer &amp; AI Automation Specialist</span>
+                <span>AI Automation Engineer &amp; Software Developer</span>
               </div>
               <a href="/resume.pdf" download="PuaNg_Resume" className="btn-download">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
