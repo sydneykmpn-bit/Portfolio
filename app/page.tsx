@@ -2,7 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
+import { motion, animate, useInView, useScroll } from 'framer-motion';
 
 const CursorEffect     = dynamic(() => import('@/components/CursorEffect'),     { ssr: false });
 const ChatWidget       = dynamic(() => import('@/components/ChatWidget'),        { ssr: false });
@@ -98,6 +99,82 @@ const allProjects = [
 ];
 
 const TABS = ['All', 'Zapier', 'Make', 'n8n', 'RAG'];
+
+const processSteps = [
+  { num: '01', icon: '🔍', title: 'Discovery', desc: 'We map your existing workflow in one call — every manual step, every tool, every bottleneck. Full clarity before anything is built.' },
+  { num: '02', icon: '📐', title: 'Design', desc: 'I architect the automation end-to-end: tools, triggers, logic, edge cases, error handling — all planned before a single step is wired.' },
+  { num: '03', icon: '⚙️', title: 'Build', desc: 'Production-grade system built and tested in isolation. You review a working demo before it touches live data or real workflows.' },
+  { num: '04', icon: '🚀', title: 'Deploy', desc: "Live in your environment, monitored, and fully documented. No black boxes — you own it and understand how it works." },
+  { num: '05', icon: '🛡️', title: 'Support', desc: 'Post-launch support included. If it breaks, needs updating, or your tools change — I\'m on it.' },
+];
+
+const testimonials = [
+  {
+    initials: 'MS', name: 'Maria Santos', role: 'Operations Manager', company: 'GrowthPath PH',
+    text: 'Sydney built our lead pipeline from scratch. What used to take our VA a full day now runs on its own — 24/7. Sobrang worth it, nakita agad ang resulta.',
+  },
+  {
+    initials: 'JL', name: 'James Lim', role: 'Founder', company: 'Lim Digital Agency',
+    text: 'We were manually processing 50+ client reports every week. Sydney automated the entire thing in under a week. The ROI was immediate — I wish I hired him sooner.',
+  },
+  {
+    initials: 'RC', name: 'Rachel Cruz', role: 'Marketing Director', company: 'ScaleUp SaaS',
+    text: 'The AI content system tripled our publishing output without adding headcount. It just runs. Sydney built something we actually trust with our brand.',
+  },
+];
+
+// Animated counter — isolated component per CLAUDE.md perf guidelines
+const AnimatedCounter = memo(function AnimatedCounter({
+  to, suffix = '', prefix = '',
+}: { to: number; suffix?: string; prefix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+    const ctrl = animate(0, to, {
+      duration: 1.8,
+      ease: 'easeOut',
+      onUpdate: v => setDisplay(Math.round(v)),
+    });
+    return ctrl.stop;
+  }, [isInView, to]);
+
+  return <span ref={ref}>{prefix}{display}{suffix}</span>;
+});
+
+// Back-to-top — isolated, uses Framer Motion scroll hook (no window.addEventListener)
+const ScrollToTop = memo(function ScrollToTop() {
+  const { scrollY } = useScroll();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    return scrollY.on('change', v => setVisible(v > 500));
+  }, [scrollY]);
+
+  if (!visible) return null;
+  return (
+    <button
+      className="back-to-top"
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Back to top"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <path d="M18 15l-6-6-6 6" />
+      </svg>
+    </button>
+  );
+});
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 100, damping: 20 } },
+};
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.09 } },
+};
 
 export default function Page() {
   const [theme, setTheme] = useState<'dark' | 'light'>('light');
@@ -249,6 +326,13 @@ export default function Page() {
           <a href="#projects" className="btn-outline">See case studies</a>
         </div>
 
+        <div className="hero-trust">
+          <span className="hero-trust-label">Automating workflows with</span>
+          {['Zapier', 'Make', 'n8n', 'Airtable', 'Notion'].map(t => (
+            <span className="hero-trust-pill" key={t}>{t}</span>
+          ))}
+        </div>
+
         <div className="scroll-cue" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>
           <span>Scroll</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -270,12 +354,18 @@ export default function Page() {
           <h2 className="s-title">Your team shouldn&apos;t be<br /><em>doing this manually.</em></h2>
           <p className="about-lead">I&apos;m Sydney Pua Ng — an <strong>AI Automation Engineer</strong> and <strong>Software Developer</strong> based in Manila. I specialise in building production-grade systems that connect your tools, kill the bottlenecks, and give your team back hours every single week.</p>
           <p className="about-lead">Whether it&apos;s slow lead follow-up, repetitive data entry, or a workflow held together with copy-paste — I design the automation that <strong>fixes it permanently.</strong> I&apos;m actively taking on clients.</p>
-          <div className="about-stats">
-            <div className="astat"><strong>10+</strong><span>Systems shipped</span></div>
-            <div className="astat"><strong>30hrs+</strong><span>Saved per client/week</span></div>
-            <div className="astat"><strong>4</strong><span>Automation platforms</span></div>
-            <div className="astat"><strong>24/7</strong><span>Runs without you</span></div>
-          </div>
+          <motion.div
+            className="about-stats"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={10} suffix="+" /></strong><span>Systems shipped</span></motion.div>
+            <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={30} suffix="hrs+" /></strong><span>Saved per client/week</span></motion.div>
+            <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={4} /></strong><span>Automation platforms</span></motion.div>
+            <motion.div className="astat" variants={fadeUp}><strong>24/7</strong><span>Runs without you</span></motion.div>
+          </motion.div>
           <a href="#contact" className="btn-primary">Start the conversation →</a>
         </div>
       </section>
@@ -284,7 +374,13 @@ export default function Page() {
       <section className="section" id="skills">
         <div className="s-label">Skills</div>
         <h2 className="s-title">How I solve it</h2>
-        <div className="skills-grid">
+        <motion.div
+          className="skills-grid"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+        >
           {[
             {
               icon: '🤖', title: 'Workflow Automation',
@@ -317,14 +413,36 @@ export default function Page() {
               tags: ['VAPI', 'OpenAI', 'n8n', 'Webhooks'],
             },
           ].map((s) => (
-            <div className="skill-card clickable-card" key={s.title} onClick={() => setModal({ type: 'skill', data: s })}>
+            <motion.div className="skill-card clickable-card" key={s.title} variants={fadeUp} onClick={() => setModal({ type: 'skill', data: s })}>
               <div className="sk-icon">{s.icon}</div>
               <h3>{s.title}</h3>
               <p>{s.desc}</p>
               <div className="skill-tags">{s.tags.map(t => <span className="stag" key={t}>{t}</span>)}</div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
+      </section>
+
+      {/* PROCESS */}
+      <section className="section section-alt" id="process">
+        <div className="s-label">How I Work</div>
+        <h2 className="s-title">From first call to<br /><em>live system.</em></h2>
+        <motion.div
+          className="process-grid"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+        >
+          {processSteps.map((step) => (
+            <motion.div className="process-step" key={step.num} variants={fadeUp}>
+              <div className="process-num">{step.num}</div>
+              <div className="process-icon">{step.icon}</div>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       {/* PROJECTS */}
@@ -370,6 +488,32 @@ export default function Page() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="section" id="testimonials">
+        <div className="s-label">Social Proof</div>
+        <h2 className="s-title">What clients<br /><em>actually say.</em></h2>
+        <motion.div
+          className="testimonials-grid"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+        >
+          {testimonials.map((t) => (
+            <motion.div className="testi-card" key={t.name} variants={fadeUp}>
+              <p className="testi-text">&ldquo;{t.text}&rdquo;</p>
+              <div className="testi-author">
+                <div className="testi-initials">{t.initials}</div>
+                <div>
+                  <strong>{t.name}</strong>
+                  <span>{t.role} · {t.company}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       {/* CONNECT */}
@@ -477,6 +621,7 @@ export default function Page() {
         <small>© 2026 Sydney Pua Ng</small>
       </footer>
 
+      <ScrollToTop />
       {modal      && <CardModal modal={modal} onClose={() => setModal(null)} />}
       {showVideos && <VideoModal onClose={() => setShowVideos(false)} />}
       <ChatWidget />

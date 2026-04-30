@@ -25,6 +25,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
           rel="stylesheet"
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Person',
+            name: 'Sydney Pua Ng',
+            jobTitle: 'AI Automation Engineer & Software Developer',
+            url: 'https://skmpn.dev',
+            email: 'sydneykmpn@gmail.com',
+            address: { '@type': 'PostalAddress', addressLocality: 'Manila', addressCountry: 'PH' },
+            knowsAbout: ['AI Automation', 'Workflow Automation', 'RAG Pipelines', 'Zapier', 'Make', 'n8n', 'Next.js', 'Python'],
+            offers: {
+              '@type': 'Offer',
+              description: 'AI automation systems, RAG pipelines, and workflow automation that eliminate manual work.',
+            },
+          }) }}
+        />
       </head>
       <body>{children}</body>
     </html>
