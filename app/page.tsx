@@ -48,12 +48,14 @@ const allProjects = [
     metrics: [{ val: '2×', label: 'Lead paths' }, { val: '100%', label: 'Auto-routed' }],
     img: '/leads-enrichment.png',
   },
+  /* TODO: add thumbnail before uncommenting
   {
     category: 'Make',
     icon: '📈', tags: ['Make', 'Xero', 'Asana'], title: 'Financial Data Automation',
     desc: 'Automated financial reporting pipeline — Xero extraction, CSV transformation, and Asana task injection.',
     metrics: [{ val: '15hrs', label: 'Saved/week' }, { val: '100%', label: 'Accuracy' }],
   },
+  */
   {
     category: 'Make',
     icon: '🗂️', tags: ['Make', 'Google Drive', 'AI Analysis', 'Gmail'], title: 'Smart Drive Auto-Sorter',
@@ -61,6 +63,7 @@ const allProjects = [
     metrics: [{ val: '0', label: 'Manual sorting' }, { val: 'AI', label: 'File naming' }],
     img: '/Auto_Sort_Gmail_Attachments_on_Drive.png',
   },
+  /* TODO: add thumbnail before uncommenting
   {
     category: 'n8n',
     icon: '📊', tags: ['n8n', 'Webhooks', 'OpenAI'], title: 'AI Lead Outreach System',
@@ -91,6 +94,7 @@ const allProjects = [
     desc: 'Autonomous AI agent combining web search, RAG retrieval, and LangChain reasoning to produce structured research reports on demand.',
     metrics: [{ val: '100%', label: 'Automated' }, { val: 'Multi-source', label: 'Retrieval' }],
   },
+  */
 ];
 
 const TABS = ['All', 'Zapier', 'Make', 'n8n', 'RAG'];
