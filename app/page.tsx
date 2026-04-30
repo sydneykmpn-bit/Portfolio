@@ -30,7 +30,7 @@ const allProjects = [
   {
     category: 'Zapier',
     icon: '🤖', tags: ['Zapier', 'OpenAI'], title: 'AI Content Automation',
-    desc: 'Generates content from source files and auto-publishes across Facebook, and Instagram — zero manual work.',
+    desc: 'Generates content from source files and auto-publishes across Facebook and Instagram — zero manual work.',
     metrics: [{ val: '30hrs', label: 'Saved/week' }, { val: '3×', label: 'Platforms' }],
     img: '/ai-content-repurposing.png',
   },
@@ -42,6 +42,13 @@ const allProjects = [
     img: '/zapier-expert-for-asana.png',
   },
   {
+    category: 'Zapier',
+    icon: '🎯', tags: ['Zapier', 'CRM', 'Gmail', 'Webhooks'], title: 'Leads Enrichment & Routing Pipeline',
+    desc: 'Catches form submissions via webhook, formats data, and routes high-priority leads to Google Sheets with personalised Gmail follow-ups — automatically.',
+    metrics: [{ val: '2×', label: 'Lead paths' }, { val: '100%', label: 'Auto-routed' }],
+    img: '/leads-enrichment.png',
+  },
+  {
     category: 'Make',
     icon: '📈', tags: ['Make', 'Xero', 'Asana'], title: 'Financial Data Automation',
     desc: 'Automated financial reporting pipeline — Xero extraction, CSV transformation, and Asana task injection.',
@@ -49,9 +56,9 @@ const allProjects = [
   },
   {
     category: 'Make',
-    icon: '📧', tags: ['Make', 'Gmail', 'Drive'], title: 'Email & File Automation',
-    desc: 'Intelligent email attachment router — incoming emails parsed, attachments sorted, and files routed automatically.',
-    metrics: [{ val: '90%', label: 'Less manual work' }, { val: '0', label: 'Manual sorting' }],
+    icon: '🗂️', tags: ['Make', 'Google Drive', 'AI Analysis', 'Gmail'], title: 'Smart Drive Auto-Sorter',
+    desc: 'Watches Gmail for incoming attachments, uses AI to analyse and rename files, uploads them to structured Drive folders, logs each entry to a spreadsheet, and sends a notification.',
+    metrics: [{ val: '0', label: 'Manual sorting' }, { val: 'AI', label: 'File naming' }],
     img: '/Auto_Sort_Gmail_Attachments_on_Drive.png',
   },
   {
@@ -59,7 +66,6 @@ const allProjects = [
     icon: '📊', tags: ['n8n', 'Webhooks', 'OpenAI'], title: 'AI Lead Outreach System',
     desc: 'Real-time webhook lead intake with AI scoring, enrichment, and personalised outreach message generation.',
     metrics: [{ val: 'Live', label: 'Processing' }, { val: 'AI', label: 'Personalised' }],
-    img: '/leads-enrichment.png',
   },
   {
     category: 'n8n',
@@ -72,12 +78,6 @@ const allProjects = [
     icon: '🎬', tags: ['n8n', 'Content APIs'], title: 'Short-Form Content Pipeline',
     desc: 'Full automated pipeline from AI content generation to publishing YouTube Shorts and Facebook Reels.',
     metrics: [{ val: '100%', label: 'Automated' }, { val: '0', label: 'Manual posts' }],
-  },
-  {
-    category: 'HighLevel',
-    icon: '📅', tags: ['HighLevel', 'n8n', 'AI'], title: 'AI Appointment Setter',
-    desc: 'Automated inquiry handling and appointment booking with intelligent scheduling logic and instant responses.',
-    metrics: [{ val: '24/7', label: 'Booking' }, { val: '100%', label: 'Auto-response' }],
   },
   {
     category: 'RAG',
@@ -93,7 +93,7 @@ const allProjects = [
   },
 ];
 
-const TABS = ['All', 'Zapier', 'Make', 'n8n', 'HighLevel', 'RAG'];
+const TABS = ['All', 'Zapier', 'Make', 'n8n', 'RAG'];
 
 export default function Page() {
   const [theme, setTheme] = useState<'dark' | 'light'>('light');
@@ -441,10 +441,6 @@ export default function Page() {
       {/* FOOTER */}
       <footer>
         <small>© 2026 Sydney Pua Ng</small>
-        <div className="foot-links">
-          <a href="mailto:sydneykmpn@gmail.com">Email</a>
-          <a href="https://wa.me/639177059448" target="_blank" rel="noreferrer">WhatsApp</a>
-        </div>
       </footer>
 
       {modal      && <CardModal modal={modal} onClose={() => setModal(null)} />}
