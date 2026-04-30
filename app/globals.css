@@ -600,7 +600,6 @@ footer small{color:var(--muted);font-size:.77rem;}
 
 @media(max-width:600px){
   nav{padding:0 5%;height:56px;}
-  .nav-links{gap:.9rem;}
   .nav-group{gap:.75rem;}
   .nav-badge{display:none;}
   #hero{padding:6.5rem 5% 4rem;}
