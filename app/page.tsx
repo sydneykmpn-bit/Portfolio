@@ -28,6 +28,14 @@ const tools = [
 ];
 
 const allProjects = [
+  // ── Featured (has screenshot) ──────────────────────────────────
+  {
+    category: 'n8n',
+    icon: '💬', tags: ['n8n', 'Facebook Messenger', 'OpenAI', 'AI'], title: 'Facebook AI Agent Chatbot',
+    desc: 'Client needed 24/7 Messenger support without adding staff. Built a production AI chatbot on n8n that understands intent, maintains conversation context, accesses product info, and escalates to a human only when needed — fully automated from first message to resolution.',
+    metrics: [{ val: '24/7', label: 'Available' }, { val: '0', label: 'Human needed' }],
+    img: '/AI_Agent.png',
+  },
   {
     category: 'Zapier',
     icon: '🤖', tags: ['Zapier', 'OpenAI'], title: 'AI Content Automation',
@@ -49,14 +57,6 @@ const allProjects = [
     metrics: [{ val: '<60s', label: 'Response time' }, { val: '100%', label: 'Auto-routed' }],
     img: '/leads-enrichment.png',
   },
-  /* TODO: add thumbnail before uncommenting
-  {
-    category: 'Make',
-    icon: '📈', tags: ['Make', 'Xero', 'Asana'], title: 'Financial Data Automation',
-    desc: 'Automated financial reporting pipeline — Xero extraction, CSV transformation, and Asana task injection.',
-    metrics: [{ val: '15hrs', label: 'Saved/week' }, { val: '100%', label: 'Accuracy' }],
-  },
-  */
   {
     category: 'Make',
     icon: '🗂️', tags: ['Make', 'Google Drive', 'AI Analysis', 'Gmail'], title: 'Smart Drive Auto-Sorter',
@@ -64,7 +64,25 @@ const allProjects = [
     metrics: [{ val: '0', label: 'Manual sorting' }, { val: 'AI', label: 'File naming' }],
     img: '/Auto_Sort_Gmail_Attachments_on_Drive.png',
   },
-  /* TODO: add thumbnail before uncommenting
+  // ── Archive (screenshots pending) ─────────────────────────────
+  {
+    category: 'Dev',
+    icon: '🎓', tags: ['React', 'Django', 'PostgreSQL', 'REST API'], title: 'Academic Repository System',
+    desc: 'Full-stack institutional document management platform — students submit research papers and theses, faculty review and approve, and administrators manage the repository with granular role-based access control and audit trails.',
+    metrics: [{ val: 'Full-stack', label: 'React + Django' }, { val: 'RBAC', label: 'Role-based access' }],
+  },
+  {
+    category: 'Dev',
+    icon: '🏪', tags: ['React', 'Python', 'PostgreSQL', 'REST API'], title: 'Point-of-Sale (POS) Interface',
+    desc: 'Custom POS system for a retail client — real-time inventory tracking, barcode scanning, order processing, receipt generation, and a daily sales dashboard built into a touch-optimised React interface.',
+    metrics: [{ val: 'Real-time', label: 'Inventory sync' }, { val: 'Touch UI', label: 'Optimised' }],
+  },
+  {
+    category: 'Make',
+    icon: '📈', tags: ['Make', 'Xero', 'Asana'], title: 'Financial Data Automation',
+    desc: 'Automated financial reporting pipeline — Xero extraction, CSV transformation, and Asana task injection.',
+    metrics: [{ val: '15hrs', label: 'Saved/week' }, { val: '100%', label: 'Accuracy' }],
+  },
   {
     category: 'n8n',
     icon: '📊', tags: ['n8n', 'Webhooks', 'OpenAI'], title: 'AI Lead Outreach System',
@@ -73,32 +91,19 @@ const allProjects = [
   },
   {
     category: 'n8n',
-    icon: '💬', tags: ['n8n', 'Facebook', 'AI'], title: 'AI Facebook Messenger Bot',
-    desc: 'Production-ready AI chatbot for Facebook Messenger with context memory, tool access, and 24/7 availability.',
-    metrics: [{ val: '24/7', label: 'Available' }, { val: '0', label: 'Human needed' }],
-  },
-  {
-    category: 'n8n',
     icon: '🎬', tags: ['n8n', 'Content APIs'], title: 'Short-Form Content Pipeline',
     desc: 'Full automated pipeline from AI content generation to publishing YouTube Shorts and Facebook Reels.',
     metrics: [{ val: '100%', label: 'Automated' }, { val: '0', label: 'Manual posts' }],
   },
   {
-    category: 'RAG',
+    category: 'n8n',
     icon: '🧠', tags: ['RAG', 'Supabase', 'OpenAI'], title: 'RAG Knowledge Base Agent',
     desc: 'Semantic search system — documents chunked, embedded into Supabase pgvector, and retrieved via OpenAI for accurate, source-grounded answers.',
     metrics: [{ val: '<1s', label: 'Response time' }, { val: '95%+', label: 'Accuracy' }],
   },
-  {
-    category: 'RAG',
-    icon: '🔍', tags: ['n8n', 'RAG', 'LangChain'], title: 'Multi-Source Research Agent',
-    desc: 'Autonomous AI agent combining web search, RAG retrieval, and LangChain reasoning to produce structured research reports on demand.',
-    metrics: [{ val: '100%', label: 'Automated' }, { val: 'Multi-source', label: 'Retrieval' }],
-  },
-  */
 ];
 
-const TABS = ['All', 'Zapier', 'Make', 'n8n', 'RAG'];
+const TOOL_TABS = ['Make', 'n8n', 'Zapier'];
 
 const processSteps = [
   { num: '01', icon: '🔍', title: 'Discovery', desc: 'We map your existing workflow in one call — every manual step, every tool, every bottleneck. Full clarity before anything is built.' },
@@ -178,7 +183,7 @@ const staggerContainer = {
 
 export default function Page() {
   const [theme, setTheme] = useState<'dark' | 'light'>('light');
-  const [activeTab, setActiveTab] = useState('All');
+  const [activeTab, setActiveTab] = useState('Featured');
   const [modal, setModal] = useState<ModalPayload | null>(null);
   const [showVideos, setShowVideos] = useState(false);
   const [formSent, setFormSent] = useState(false);
@@ -245,7 +250,11 @@ export default function Page() {
     }
   };
 
-  const visibleProjects = activeTab === 'All' ? allProjects : allProjects.filter(p => p.category === activeTab);
+  const visibleProjects =
+    activeTab === 'Featured' ? allProjects.filter(p => p.img) :
+    activeTab === 'All'      ? allProjects :
+    allProjects.filter(p => p.category === activeTab);
+  const archiveCount = allProjects.filter(p => !p.img).length;
   const calendlyUrl = 'https://calendly.com/sydneykmpn/30min?hide_gdpr_banner=1&primary_color=3b82f6';
 
   return (
@@ -454,13 +463,29 @@ export default function Page() {
             Watch Video Demos
           </button>
         </div>
-        <h2 className="s-title">Case Studies</h2>
+        <h2 className="s-title">
+          {activeTab === 'Featured' ? 'Featured Work' : activeTab === 'All' ? 'All Projects' : `${activeTab} Projects`}
+        </h2>
         <div className="proj-tabs">
-          {TABS.map(tab => (
+          <button
+            className={`ptab${activeTab === 'Featured' ? ' active' : ''}`}
+            onClick={() => setActiveTab('Featured')}
+          >
+            Featured
+          </button>
+          <div className="ptab-sep" />
+          {TOOL_TABS.map(tab => (
             <button key={tab} className={`ptab${activeTab === tab ? ' active' : ''}`} onClick={() => setActiveTab(tab)}>
               {tab}
             </button>
           ))}
+          <div className="ptab-sep" />
+          <button
+            className={`ptab ptab-secondary${activeTab === 'All' ? ' active' : ''}`}
+            onClick={() => setActiveTab('All')}
+          >
+            All
+          </button>
         </div>
         <div className="projects-grid">
           {visibleProjects.map((p) => (
@@ -488,6 +513,12 @@ export default function Page() {
             </div>
           ))}
         </div>
+        {activeTab === 'Featured' && archiveCount > 0 && (
+          <div className="proj-archive-hint">
+            {archiveCount} more project{archiveCount !== 1 ? 's' : ''} in archive —{' '}
+            <button onClick={() => setActiveTab('All')}>View all</button>
+          </div>
+        )}
       </section>
 
       {/* TESTIMONIALS */}
