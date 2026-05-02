@@ -10,8 +10,6 @@ const ChatWidget       = dynamic(() => import('@/components/ChatWidget'),       
 const ScrollReveal     = dynamic(() => import('@/components/ScrollReveal'),      { ssr: false });
 const CardModal        = dynamic(() => import('@/components/CardModal'),         { ssr: false });
 const VideoModal       = dynamic(() => import('@/components/VideoModal'),        { ssr: false });
-const ResultsTicker    = dynamic(() => import('@/components/ResultsTicker'),     { ssr: false });
-
 import type { ModalPayload } from '@/components/CardModal';
 
 const tools = [
@@ -110,6 +108,18 @@ const allProjects = [
 
 const TOOL_TABS = ['Make', 'n8n', 'Zapier'];
 
+const faqs = [
+  { q: 'How quickly can you build and deploy an automation?', a: 'Most workflows are live within 3–5 business days after our discovery call. Complex multi-system builds may take up to 2 weeks — I\'ll give you a clear timeline before any work begins.' },
+  { q: 'Will I need to be technical to use it?', a: 'Not at all. I build systems you can run, monitor, and manage without writing a single line of code. I document everything and walk you through it before handoff.' },
+  { q: 'What if something breaks after you finish?', a: 'Post-launch support is included. I monitor the system and fix any issues that come up — if your tools update or your workflow changes, I\'m on it.' },
+  { q: 'Can you automate something specific to my industry?', a: 'Yes — I\'ve worked across fitness, food and beverage, e-commerce, and service businesses. If your workflow is repeatable, it can be automated regardless of industry.' },
+  { q: 'Do I need existing tools or software?', a: 'No. I can work with what you already have or recommend the right stack for your budget and use case — starting from free-tier tools if needed.' },
+  { q: 'How is this different from hiring a virtual assistant?', a: 'A VA works 8 hours a day, takes breaks, and makes mistakes when tired. An automation runs 24/7, never forgets a step, and scales instantly to handle 10x the volume at the same cost.' },
+  { q: 'What are your rates?', a: 'I keep pricing flexible based on scope and complexity. The discovery call is free — that\'s where we figure out what makes sense. Scroll to Connect to book it.' },
+  { q: 'Do you offer ongoing maintenance?', a: 'Yes — retainer packages are available for businesses that want continuous updates, monitoring, and new automations built over time.' },
+  { q: 'What if I have a tool or platform you haven\'t mentioned?', a: 'I work with almost any tool or platform. Just tell me what you\'re currently using — most likely I can integrate it seamlessly.' },
+];
+
 const processSteps = [
   { num: '01', icon: '🔍', title: 'Discovery', desc: 'We map your existing workflow in one call — every manual step, every tool, every bottleneck. Full clarity before anything is built.' },
   { num: '02', icon: '📐', title: 'Design', desc: 'I architect the automation end-to-end: tools, triggers, logic, edge cases, error handling — all planned before a single step is wired.' },
@@ -125,7 +135,7 @@ const testimonials = [
   },
   {
     initials: 'KC', name: 'Kacie C.', role: 'Local Cafe Owner', company: 'Mori Cafe',
-    text: 'I was spending every Sunday evening manually scheduling our social posts and sending supplier reminders. Sydney automated the whole thing — content goes out consistently, reminders fire on time, and I haven\'t touched it since he set it up. That time back has been genuinely life-changing for a small business owner.',
+    text: 'I used to struggle a lot with scheduling content. Sydney automated everything and made my life so much easier.',
   },
 ];
 
@@ -190,6 +200,8 @@ export default function Page() {
   const [formSent, setFormSent] = useState(false);
   const [formError, setFormError] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [expandedProject, setExpandedProject] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
@@ -364,9 +376,6 @@ export default function Page() {
         </div>
       </section>
 
-      {/* RESULTS TICKER */}
-      <ResultsTicker />
-
       {/* TOOLS GRID */}
       <div id="tools">
         <p className="marquee-label">Stack &amp; Integrations</p>
@@ -529,13 +538,22 @@ export default function Page() {
                 <h3>{p.title}</h3>
                 {p.problem ? (
                   <>
-                    <div className="proj-block">
-                      <span className="proj-block-label">Problem</span>
-                      <p className="proj-block-text">{p.problem}</p>
-                    </div>
-                    <div className="proj-block">
-                      <span className="proj-block-label">Solution</span>
-                      <p className="proj-block-text">{p.desc}</p>
+                    <button
+                      className={`proj-expand-btn${expandedProject === p.title ? ' open' : ''}`}
+                      onClick={(e) => { e.stopPropagation(); setExpandedProject(expandedProject === p.title ? null : p.title); }}
+                    >
+                      <span>{expandedProject === p.title ? 'Hide details' : 'View case study'}</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 9l6 6 6-6" /></svg>
+                    </button>
+                    <div className={`proj-accordion${expandedProject === p.title ? ' open' : ''}`}>
+                      <div className="proj-block">
+                        <span className="proj-block-label">Problem</span>
+                        <p className="proj-block-text">{p.problem}</p>
+                      </div>
+                      <div className="proj-block">
+                        <span className="proj-block-label">Solution</span>
+                        <p className="proj-block-text">{p.desc}</p>
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -588,8 +606,33 @@ export default function Page() {
         </motion.div>
       </section>
 
+      {/* FAQ */}
+      <section className="section" id="faq">
+        <div className="s-label">FAQ</div>
+        <h2 className="s-title">Common questions<br /><em>answered.</em></h2>
+        <div className="faq-list">
+          {faqs.map((item, i) => (
+            <div
+              key={i}
+              className={`faq-item${openFaq === i ? ' open' : ''}`}
+              onClick={() => setOpenFaq(openFaq === i ? null : i)}
+            >
+              <div className="faq-question">
+                <span>{item.q}</span>
+                <svg className="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </div>
+              <div className="faq-answer">
+                <p>{item.a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CONNECT */}
-      <section className="section" id="contact">
+      <section className="section section-alt" id="contact">
         <div className="s-label">Connect</div>
         <h2 className="s-title">Let&apos;s build something that<br /><em>pays for itself.</em></h2>
         <p className="connect-sub">Most clients recover the cost within the first week. If your team repeats a task more than twice a day — I can automate it. Book a free 30-minute call.</p>
