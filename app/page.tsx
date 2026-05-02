@@ -288,9 +288,13 @@ export default function Page() {
         <div className="nav-group">
           <ul className="nav-links">
             <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Connect</a></li>
+            <li><a href="#skills">Services</a></li>
+            <li><a href="#tools">Stack</a></li>
+            <li><a href="#projects">Portfolio</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
           </ul>
           <div className="nav-right">
             <button className="theme-btn" onClick={toggleTheme} aria-label="Toggle theme">
@@ -322,10 +326,14 @@ export default function Page() {
             <button className="mob-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">✕</button>
             <p className="mob-label">Navigation</p>
             <ul className="mob-links">
-              <li><a href="#about"    onClick={() => setMenuOpen(false)}>About<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
-              <li><a href="#skills"   onClick={() => setMenuOpen(false)}>Skills<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
-              <li><a href="#projects" onClick={() => setMenuOpen(false)}>Projects<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
-              <li><a href="#contact"  onClick={() => setMenuOpen(false)}>Connect<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#about"        onClick={() => setMenuOpen(false)}>About<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#skills"       onClick={() => setMenuOpen(false)}>Services<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#tools"        onClick={() => setMenuOpen(false)}>Stack<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#projects"     onClick={() => setMenuOpen(false)}>Portfolio<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#process"      onClick={() => setMenuOpen(false)}>Process<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#faq"          onClick={() => setMenuOpen(false)}>FAQ<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#testimonials" onClick={() => setMenuOpen(false)}>Reviews<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+              <li><a href="#contact"      onClick={() => setMenuOpen(false)}>Contact<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
             </ul>
           </div>
         </div>
@@ -339,7 +347,14 @@ export default function Page() {
         </div>
 
         <h1 className="hero-bigname">
-          <span className="hero-word" style={{ animationDelay: '.08s' }}>Sydney Pua Ng</span>
+          <motion.span
+            className="hero-name-gradient"
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 90, damping: 20, delay: 0.1 }}
+          >
+            Sydney Pua Ng
+          </motion.span>
         </h1>
 
         <p className="hero-role">AI Automation Engineer · Manila, PH</p>
@@ -373,31 +388,64 @@ export default function Page() {
         </div>
       </section>
 
-      {/* WHO I HELP */}
-      <WhoIHelp />
-
       {/* ABOUT */}
-      <section className="section section-alt" id="about" style={{ textAlign: 'center' }}>
-        <div className="s-label" style={{ textAlign: 'center' }}>About</div>
-        <div className="about-solo">
-          <h2 className="s-title">Manual work is your<br /><em>biggest bottleneck.</em></h2>
-          <p className="about-lead">I help growing businesses and agencies cut the manual tasks eating their team&apos;s time — using AI and automation tools that connect to what you already use. <strong>No new software to learn. No engineers to hire.</strong></p>
-          <p className="about-lead">Slow lead follow-up, content that needs scheduling by hand, reports pulled manually every week — these aren&apos;t just annoying. They&apos;re expensive. I build the system that <strong>fixes it permanently</strong> and keeps running after I&apos;m gone.</p>
-          <motion.div
-            className="about-stats"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-          >
-            <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={10} suffix="+" /></strong><span>Systems shipped</span></motion.div>
-            <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={30} suffix="hrs+" /></strong><span>Saved per client/week</span></motion.div>
-            <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={4} /></strong><span>Automation platforms</span></motion.div>
-            <motion.div className="astat" variants={fadeUp}><strong>24/7</strong><span>Runs without you</span></motion.div>
-          </motion.div>
-          <a href="#contact" className="btn-primary">Start the conversation →</a>
+      <section className="section section-alt" id="about">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+
+          {/* LEFT — Text & Stats */}
+          <div className="flex-1 min-w-0">
+            <div className="s-label">About</div>
+            <h2 className="s-title">Manual work is your<br /><em>biggest bottleneck.</em></h2>
+            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
+              I help growing businesses and agencies cut the manual tasks eating their team&apos;s time — using AI and automation tools that connect to what you already use. <strong>No new software to learn. No engineers to hire.</strong>
+            </p>
+            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
+              Slow lead follow-up, content that needs scheduling by hand, reports pulled manually every week — these aren&apos;t just annoying. They&apos;re expensive. I build the system that <strong>fixes it permanently</strong> and keeps running after I&apos;m gone.
+            </p>
+            <motion.div
+              className="about-stats"
+              style={{ gridTemplateColumns: 'repeat(2,1fr)', maxWidth: 'none', margin: '2.2rem 0 2rem' }}
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+            >
+              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={10} suffix="+" /></strong><span>Systems shipped</span></motion.div>
+              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={30} suffix="hrs+" /></strong><span>Saved per client/week</span></motion.div>
+              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={4} /></strong><span>Automation platforms</span></motion.div>
+              <motion.div className="astat" variants={fadeUp}><strong>24/7</strong><span>Runs without you</span></motion.div>
+            </motion.div>
+            <a href="#contact" className="btn-primary">Start the conversation →</a>
+          </div>
+
+          {/* RIGHT — Portrait */}
+          <div className="flex-shrink-0 w-full lg:w-[400px]">
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '420px',
+              aspectRatio: '3/4',
+              borderRadius: '1.5rem',
+              overflow: 'hidden',
+              border: '1px solid rgba(59,130,246,.22)',
+              background: 'rgba(0,0,0,.5)',
+              boxShadow: '0 48px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(59,130,246,.07), inset 0 1px 0 rgba(255,255,255,.07)',
+              margin: '0 auto',
+            }}>
+              <Image
+                src="/2x2.png"
+                alt="Sydney Pua Ng — AI Automation Engineer"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center 12%' }}
+              />
+            </div>
+          </div>
+
         </div>
       </section>
+
+      {/* WHO I HELP */}
+      <WhoIHelp />
 
       {/* SKILLS — Services */}
       <section className="section" id="skills">
