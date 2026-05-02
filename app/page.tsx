@@ -318,7 +318,7 @@ export default function Page() {
         <div className="hero-left">
           <div className="hero-tag">
             <span className="hero-tag-dot" />
-            2 client slots open this month
+            Open to work
           </div>
           <h1 className="hero-name">
             <span className="hero-word" style={{ animationDelay: '.08s' }}>Your business</span>{' '}
