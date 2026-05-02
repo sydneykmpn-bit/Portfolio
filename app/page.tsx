@@ -208,6 +208,7 @@ export default function Page() {
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
   const [openFaqL, setOpenFaqL] = useState<number | null>(null);
   const [openFaqR, setOpenFaqR] = useState<number | null>(null);
+  const [expandedTesti, setExpandedTesti] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
@@ -395,12 +396,18 @@ export default function Page() {
           {/* LEFT — Text & Stats */}
           <div className="flex-1 min-w-0">
             <div className="s-label">About</div>
-            <h2 className="s-title">Manual work is your<br /><em>biggest bottleneck.</em></h2>
+            <h2 className="s-title">Manual work slows you down<br /><em>more than you think.</em></h2>
             <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
-              I help growing businesses and agencies cut the manual tasks eating their team&apos;s time — using AI and automation tools that connect to what you already use. <strong>No new software to learn. No engineers to hire.</strong>
+              I help businesses cut out repetitive tasks using automation — so your team can focus on what actually grows the business.
             </p>
             <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
-              Slow lead follow-up, content that needs scheduling by hand, reports pulled manually every week — these aren&apos;t just annoying. They&apos;re expensive. I build the system that <strong>fixes it permanently</strong> and keeps running after I&apos;m gone.
+              If you&apos;re manually following up with leads, scheduling content by hand, or pulling the same reports every week, you&apos;re losing time and money. I build systems that handle this stuff automatically using tools like Zapier, Make, and n8n — connected to what you already use.
+            </p>
+            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
+              <strong>No new software to learn. No engineers needed.</strong> Just workflows that run on their own and keep working long after we&apos;re done.
+            </p>
+            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
+              I&apos;ve automated lead pipelines, content publishing, data processing, AI chatbots, and appointment booking for clients who were tired of doing the same tasks over and over.
             </p>
             <motion.div
               className="about-stats"
@@ -410,11 +417,14 @@ export default function Page() {
               whileInView="visible"
               viewport={{ once: true, margin: '-60px' }}
             >
-              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={10} suffix="+" /></strong><span>Systems shipped</span></motion.div>
+              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={10} suffix="+" /></strong><span>automations delivered</span></motion.div>
               <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={30} suffix="hrs+" /></strong><span>Saved per client/week</span></motion.div>
-              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={4} /></strong><span>Automation platforms</span></motion.div>
               <motion.div className="astat" variants={fadeUp}><strong>24/7</strong><span>Runs without you</span></motion.div>
+              <motion.div className="astat astat-worldwide" variants={fadeUp}>
+                <span className="astat-worldwide-text">Remote<br />worldwide</span>
+              </motion.div>
             </motion.div>
+            <p className="about-cta-lead">If your team is stuck doing manual work that could run itself, let&apos;s talk about fixing it.</p>
             <a href="#contact" className="btn-primary">Start the conversation →</a>
           </div>
 
@@ -682,21 +692,36 @@ export default function Page() {
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
         >
-          {testimonials.map((t) => (
-            <motion.div className="testi-card" key={t.name} variants={fadeUp}>
-              <div className="testi-quote-mark">&ldquo;</div>
-              <p className="testi-text">{t.text}</p>
-              <div className="testi-divider" />
-              <div className="testi-author">
-                <div className="testi-initials">{t.initials}</div>
-                <div className="testi-author-info">
-                  <strong>{t.name}</strong>
-                  <span className="testi-role">{t.role}</span>
-                  <span className="testi-company">{t.company}</span>
+          {testimonials.map((t) => {
+            const isExpanded = expandedTesti === t.name;
+            const isLong = t.text.length > 140;
+            return (
+              <motion.div className="testi-card" key={t.name} variants={fadeUp}>
+                <div className="testi-info-icon" aria-hidden="true">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 8v4M12 16h.01"/>
+                  </svg>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <div className="testi-quote-mark">&ldquo;</div>
+                <p className={`testi-text${isLong && !isExpanded ? ' testi-clamp' : ''}`}>{t.text}</p>
+                {isLong && (
+                  <button className="testi-expand-btn" onClick={() => setExpandedTesti(isExpanded ? null : t.name)}>
+                    {isExpanded ? 'Show less ↑' : 'Read full review →'}
+                  </button>
+                )}
+                <div className="testi-divider" />
+                <div className="testi-author">
+                  <div className="testi-initials">{t.initials}</div>
+                  <div className="testi-author-info">
+                    <strong>{t.name}</strong>
+                    <span className="testi-role">{t.role}</span>
+                    <span className="testi-company">{t.company}</span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </section>
 
