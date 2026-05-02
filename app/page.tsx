@@ -373,26 +373,13 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="scroll-cue" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>
+        <div className="scroll-cue" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>
           <span>Scroll</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </div>
       </section>
-
-      {/* TOOLS GRID */}
-      <div id="tools">
-        <p className="marquee-label">Stack &amp; Integrations</p>
-        <div className="tools-static">
-          {tools.map(t => (
-            <div className="tool-pill-s" key={t.name}>
-              <span className="tool-icon-s">{t.icon}</span>
-              <span className="tool-name-s">{t.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* ABOUT */}
       <section className="section section-alt" id="about" style={{ textAlign: 'center' }}>
@@ -417,7 +404,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* SKILLS */}
+      {/* SKILLS — Services */}
       <section className="section" id="skills">
         <div className="s-label">Services</div>
         <h2 className="s-title">What I automate<br /><em>for you</em></h2>
@@ -470,29 +457,20 @@ export default function Page() {
         </motion.div>
       </section>
 
-      {/* PROCESS */}
-      <section className="section section-alt" id="process">
-        <div className="s-label">How I Work</div>
-        <h2 className="s-title">From first call to<br /><em>live system.</em></h2>
-        <motion.div
-          className="process-grid"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-        >
-          {processSteps.map((step) => (
-            <motion.div className="process-step" key={step.num} variants={fadeUp}>
-              <div className="process-num">{step.num}</div>
-              <div className="process-icon">{step.icon}</div>
-              <h3>{step.title}</h3>
-              <p>{step.desc}</p>
-            </motion.div>
+      {/* STACK — Tools & Integrations */}
+      <div id="tools">
+        <p className="marquee-label">Stack &amp; Integrations</p>
+        <div className="tools-static">
+          {tools.map(t => (
+            <div className="tool-pill-s" key={t.name}>
+              <span className="tool-icon-s">{t.icon}</span>
+              <span className="tool-name-s">{t.name}</span>
+            </div>
           ))}
-        </motion.div>
-      </section>
+        </div>
+      </div>
 
-      {/* PROJECTS */}
+      {/* PROJECTS — Portfolio */}
       <section className="section section-alt" id="projects">
         <div className="proj-section-header">
           <div className="s-label">Portfolio</div>
@@ -582,30 +560,23 @@ export default function Page() {
         )}
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="section" id="testimonials">
-        <div className="s-label">Client Results</div>
-        <h2 className="s-title">What clients<br /><em>actually say.</em></h2>
+      {/* PROCESS — How I Work */}
+      <section className="section section-alt" id="process">
+        <div className="s-label">How I Work</div>
+        <h2 className="s-title">From first call to<br /><em>live system.</em></h2>
         <motion.div
-          className="testimonials-grid"
+          className="process-grid"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
         >
-          {testimonials.map((t) => (
-            <motion.div className="testi-card" key={t.name} variants={fadeUp}>
-              <div className="testi-quote-mark">&ldquo;</div>
-              <p className="testi-text">{t.text}</p>
-              <div className="testi-divider" />
-              <div className="testi-author">
-                <div className="testi-initials">{t.initials}</div>
-                <div className="testi-author-info">
-                  <strong>{t.name}</strong>
-                  <span className="testi-role">{t.role}</span>
-                  <span className="testi-company">{t.company}</span>
-                </div>
-              </div>
+          {processSteps.map((step) => (
+            <motion.div className="process-step" key={step.num} variants={fadeUp}>
+              <div className="process-num">{step.num}</div>
+              <div className="process-icon">{step.icon}</div>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -657,7 +628,36 @@ export default function Page() {
         </div>
       </section>
 
-      {/* CONNECT */}
+      {/* TESTIMONIALS — Reviews */}
+      <section className="section" id="testimonials">
+        <div className="s-label">Client Results</div>
+        <h2 className="s-title">What clients<br /><em>actually say.</em></h2>
+        <motion.div
+          className="testimonials-grid"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+        >
+          {testimonials.map((t) => (
+            <motion.div className="testi-card" key={t.name} variants={fadeUp}>
+              <div className="testi-quote-mark">&ldquo;</div>
+              <p className="testi-text">{t.text}</p>
+              <div className="testi-divider" />
+              <div className="testi-author">
+                <div className="testi-initials">{t.initials}</div>
+                <div className="testi-author-info">
+                  <strong>{t.name}</strong>
+                  <span className="testi-role">{t.role}</span>
+                  <span className="testi-company">{t.company}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* CONNECT — Contact */}
       <section className="section section-alt" id="contact">
         <div className="s-label">Connect</div>
         <h2 className="s-title">Let&apos;s build something that<br /><em>pays for itself.</em></h2>
