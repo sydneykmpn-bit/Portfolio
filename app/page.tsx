@@ -5,12 +5,14 @@ import Image from 'next/image';
 import { useState, useEffect, useRef, memo } from 'react';
 import { motion, animate, useInView, useScroll } from 'framer-motion';
 
-const CursorEffect     = dynamic(() => import('@/components/CursorEffect'),     { ssr: false });
-const ChatWidget       = dynamic(() => import('@/components/ChatWidget'),        { ssr: false });
-const ScrollReveal     = dynamic(() => import('@/components/ScrollReveal'),      { ssr: false });
-const CardModal        = dynamic(() => import('@/components/CardModal'),         { ssr: false });
-const DraggableMarquee = dynamic(() => import('@/components/DraggableMarquee'), { ssr: false });
-const VideoModal       = dynamic(() => import('@/components/VideoModal'),        { ssr: false });
+const CursorEffect         = dynamic(() => import('@/components/CursorEffect'),         { ssr: false });
+const ChatWidget           = dynamic(() => import('@/components/ChatWidget'),            { ssr: false });
+const ScrollReveal         = dynamic(() => import('@/components/ScrollReveal'),          { ssr: false });
+const CardModal            = dynamic(() => import('@/components/CardModal'),             { ssr: false });
+const DraggableMarquee     = dynamic(() => import('@/components/DraggableMarquee'),     { ssr: false });
+const VideoModal           = dynamic(() => import('@/components/VideoModal'),            { ssr: false });
+const HeroWorkflowPreview  = dynamic(() => import('@/components/HeroWorkflowPreview'),  { ssr: false });
+const ResultsTicker        = dynamic(() => import('@/components/ResultsTicker'),         { ssr: false });
 
 import type { ModalPayload } from '@/components/CardModal';
 
@@ -32,35 +34,40 @@ const allProjects = [
   {
     category: 'n8n',
     icon: '💬', tags: ['n8n', 'Facebook Messenger', 'OpenAI', 'AI'], title: 'Facebook AI Agent Chatbot',
-    desc: 'Client needed 24/7 Messenger support without adding staff. Built a production AI chatbot on n8n that understands intent, maintains conversation context, accesses product info, and escalates to a human only when needed — fully automated from first message to resolution.',
+    problem: "Client's Facebook Page was getting 80+ messages/day. Team spending 3 hours daily copy-pasting the same answers.",
+    desc: 'Built a production AI chatbot on n8n that reads each Messenger message, understands intent, pulls product info from a knowledge base, and replies instantly — escalating to a human only when genuinely needed.',
     metrics: [{ val: '24/7', label: 'Available' }, { val: '0', label: 'Human needed' }],
     img: '/AI_Agent.png',
   },
   {
     category: 'Zapier',
     icon: '🤖', tags: ['Zapier', 'OpenAI'], title: 'AI Content Automation',
-    desc: 'Client was manually writing and scheduling posts daily. Now source files flow into AI, get formatted as platform-specific content, and publish to Facebook and Instagram automatically — zero human touch.',
+    problem: 'Social media manager spending 30+ hours/week manually writing posts, resizing for each platform, and scheduling individually.',
+    desc: 'Built a Zapier + OpenAI pipeline: source brief goes in, AI generates platform-optimised copy for each channel, content publishes to Facebook and Instagram automatically — zero manual steps.',
     metrics: [{ val: '30hrs', label: 'Saved/week' }, { val: '3×', label: 'Output volume' }],
     img: '/ai-content-repurposing.png',
   },
   {
     category: 'Zapier',
     icon: '⚡', tags: ['Zapier', 'CRM', 'Asana'], title: 'CRM & Lead Pipeline',
-    desc: 'Sales team was manually moving leads through stages, writing follow-up emails, and creating tasks by hand. Built a pipeline where every CRM stage change triggers the right email sequence and creates Asana tasks in real time — no one falls through the cracks.',
+    problem: 'Sales team manually moving leads through stages, writing follow-up emails, and creating Asana tasks by hand — leads were slipping through.',
+    desc: 'Every CRM stage change now triggers the correct email sequence and creates an Asana task in real time. No manual effort, no missed handoffs, no forgotten follow-ups.',
     metrics: [{ val: '4×', label: 'Faster follow-up' }, { val: '0', label: 'Missed leads' }],
     img: '/zapier-expert-for-asana.png',
   },
   {
     category: 'Zapier',
-    icon: '🎯', tags: ['Zapier', 'CRM', 'Gmail', 'Webhooks'], title: 'Leads Enrichment & Routing Pipeline',
-    desc: 'High-value leads were getting the same generic response as low-intent inquiries. Built a webhook pipeline that scores each submission, routes hot leads to a priority Sheet, and fires a personalised Gmail follow-up — under 60 seconds from form submission.',
+    icon: '🎯', tags: ['Zapier', 'CRM', 'Gmail', 'Webhooks'], title: 'Leads Enrichment & Routing',
+    problem: 'High-value leads were getting the same slow, generic response as low-intent inquiries. Hot leads were going cold.',
+    desc: 'Webhook pipeline that scores each submission on entry, routes hot leads to a priority Sheet, and fires a personalised Gmail follow-up — under 60 seconds from form submit to inbox.',
     metrics: [{ val: '<60s', label: 'Response time' }, { val: '100%', label: 'Auto-routed' }],
     img: '/leads-enrichment.png',
   },
   {
     category: 'Make',
     icon: '🗂️', tags: ['Make', 'Google Drive', 'AI Analysis', 'Gmail'], title: 'Smart Drive Auto-Sorter',
-    desc: 'Team was spending hours a week downloading, renaming, and filing email attachments by hand. Now every incoming attachment is caught, renamed by AI based on content, sorted into the correct Drive folder, logged to a spreadsheet, and confirmed — automatically.',
+    problem: 'Team spending hours each week downloading email attachments, renaming them manually, and filing them into the right Drive folders.',
+    desc: 'Make scenario intercepts every incoming attachment, uses AI to read content and assign the correct filename, sorts it into the right Drive folder, and logs the entry to a Sheet — automatically.',
     metrics: [{ val: '0', label: 'Manual sorting' }, { val: 'AI', label: 'File naming' }],
     img: '/Auto_Sort_Gmail_Attachments_on_Drive.png',
   },
@@ -314,32 +321,37 @@ export default function Page() {
 
       {/* HERO */}
       <section id="hero">
-        <div className="avatar-wrap">
-          <div className="avatar-ring" />
-          <div className="avatar-img">
-            <Image src="/2x2.png" alt="Sydney" width={200} height={200} priority style={{ objectPosition: 'center 10%' }} />
+        <div className="hero-left">
+          <div className="hero-tag">
+            <span className="hero-tag-dot" />
+            2 client slots open this month
           </div>
-          <div className="status-dot" />
+          <h1 className="hero-name">
+            <span className="hero-word" style={{ animationDelay: '.08s' }}>Your business</span>{' '}
+            <span className="hero-word" style={{ animationDelay: '.2s' }}>runs on</span>
+            <br />
+            <em className="hero-word" style={{ animationDelay: '.32s' }}>manual work.</em>
+            <br />
+            <span className="hero-word" style={{ animationDelay: '.44s' }}>Let&apos;s fix that.</span>
+          </h1>
+          <p className="hero-role">AI Automation Engineer · Sydney Pua Ng · Manila, PH</p>
+          <p className="hero-desc">I build AI-powered systems that handle your lead follow-up, content publishing, client onboarding, and ops — so your team focuses on growth, not admin.</p>
+
+          <div className="hero-ctas">
+            <a href="#contact" className="btn-primary">Get a Free Audit →</a>
+            <a href="#projects" className="btn-outline">See Results ↓</a>
+          </div>
+
+          <div className="hero-trust">
+            <span className="hero-trust-label">Automating with</span>
+            {['n8n', 'Zapier', 'Make', 'OpenAI', 'VAPI'].map(t => (
+              <span className="hero-trust-pill" key={t}>{t}</span>
+            ))}
+          </div>
         </div>
 
-        <div className="hero-tag">Available for new projects</div>
-        <h1 className="hero-name">
-          <span className="hero-word" style={{ animationDelay: '.1s' }}>I&apos;m</span>{' '}
-          <em className="hero-word" style={{ animationDelay: '.26s' }}>Sydney</em>
-        </h1>
-        <p className="hero-role">AI Automation Engineer · Software Developer · Manila, PH</p>
-        <p className="hero-desc">I build automation systems that eliminate manual work — so your team moves faster, responds in seconds, and scales without adding headcount.</p>
-
-        <div className="hero-ctas">
-          <a href="#contact" className="btn-primary">Book a free call →</a>
-          <a href="#projects" className="btn-outline">See case studies</a>
-        </div>
-
-        <div className="hero-trust">
-          <span className="hero-trust-label">Automating workflows with</span>
-          {['Zapier', 'Make', 'n8n', 'Airtable', 'Notion'].map(t => (
-            <span className="hero-trust-pill" key={t}>{t}</span>
-          ))}
+        <div className="hero-right">
+          <HeroWorkflowPreview />
         </div>
 
         <div className="scroll-cue" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -349,6 +361,9 @@ export default function Page() {
           </svg>
         </div>
       </section>
+
+      {/* RESULTS TICKER */}
+      <ResultsTicker />
 
       {/* TOOL MARQUEE */}
       <div id="tools">
@@ -360,9 +375,9 @@ export default function Page() {
       <section className="section section-alt" id="about" style={{ textAlign: 'center' }}>
         <div className="s-label" style={{ textAlign: 'center' }}>About</div>
         <div className="about-solo">
-          <h2 className="s-title">Your team shouldn&apos;t be<br /><em>doing this manually.</em></h2>
-          <p className="about-lead">I&apos;m Sydney Pua Ng — an <strong>AI Automation Engineer</strong> and <strong>Software Developer</strong> based in Manila. I specialise in building production-grade systems that connect your tools, kill the bottlenecks, and give your team back hours every single week.</p>
-          <p className="about-lead">Whether it&apos;s slow lead follow-up, repetitive data entry, or a workflow held together with copy-paste — I design the automation that <strong>fixes it permanently.</strong> I&apos;m actively taking on clients.</p>
+          <h2 className="s-title">Manual work is your<br /><em>biggest bottleneck.</em></h2>
+          <p className="about-lead">I help growing businesses and agencies cut the manual tasks eating their team&apos;s time — using AI and automation tools that connect to what you already use. <strong>No new software to learn. No engineers to hire.</strong></p>
+          <p className="about-lead">Slow lead follow-up, content that needs scheduling by hand, reports pulled manually every week — these aren&apos;t just annoying. They&apos;re expensive. I build the system that <strong>fixes it permanently</strong> and keeps running after I&apos;m gone.</p>
           <motion.div
             className="about-stats"
             variants={staggerContainer}
@@ -381,8 +396,8 @@ export default function Page() {
 
       {/* SKILLS */}
       <section className="section" id="skills">
-        <div className="s-label">Skills</div>
-        <h2 className="s-title">How I solve it</h2>
+        <div className="s-label">Services</div>
+        <h2 className="s-title">What I automate<br /><em>for you</em></h2>
         <motion.div
           className="skills-grid"
           variants={staggerContainer}
@@ -392,34 +407,34 @@ export default function Page() {
         >
           {[
             {
-              icon: '🤖', title: 'Workflow Automation',
-              desc: 'End-to-end automation across Zapier, Make, and n8n — connecting your apps, eliminating bottlenecks, and running 24/7 without manual intervention.',
-              tags: ['Zapier', 'Make.com', 'n8n', 'Webhooks'],
+              icon: '🎯', title: 'Lead Generation & Follow-Up',
+              desc: 'Every lead gets a personalised reply in under 60 seconds — scored, routed to the right rep, and followed up automatically. No one falls through the cracks.',
+              tags: ['Zapier', 'n8n', 'CRM', 'Webhooks'],
             },
             {
-              icon: '🧠', title: 'AI Knowledge Systems',
-              desc: 'RAG pipelines that let your team query internal documents, client data, and knowledge bases in plain language — with source-grounded answers.',
-              tags: ['RAG', 'OpenAI', 'pgvector', 'LangChain', 'Supabase'],
+              icon: '📱', title: 'Social Media & Content',
+              desc: 'Source content once. AI formats it for each platform, schedules it, and publishes — Facebook, Instagram, LinkedIn — without a single manual post.',
+              tags: ['Zapier', 'OpenAI', 'Make.com', 'Buffer'],
             },
             {
-              icon: '🗄️', title: 'Integrations & APIs',
-              desc: 'REST APIs, webhooks, and database connectors that make every tool in your stack talk to each other — no more copy-pasting between systems.',
-              tags: ['PostgreSQL', 'Supabase', 'REST', 'Webhooks', 'Airtable'],
+              icon: '🤝', title: 'Client Onboarding',
+              desc: 'New client signed? From contract to fully onboarded in minutes — welcome emails, task creation, tool access, and document delivery all happen automatically.',
+              tags: ['n8n', 'Make.com', 'Notion', 'Webhooks'],
             },
             {
-              icon: '🖥️', title: 'Client Portals & UIs',
-              desc: 'Custom dashboards and admin interfaces built with React — clean, fast, and designed to surface exactly what your team needs.',
-              tags: ['React', 'Next.js', 'Tailwind', 'Vercel'],
+              icon: '⚙️', title: 'Internal Workflow Ops',
+              desc: 'Recurring reports, file sorting, data entry, and approvals — all running on schedule without reminders, manual effort, or someone remembering to do it.',
+              tags: ['Make.com', 'Google Drive', 'Airtable', 'Slack'],
             },
             {
-              icon: '⚙️', title: 'Backend & Scripting',
-              desc: 'Automation glue code, data transformation scripts, and custom APIs that handle the logic your no-code tools cannot.',
-              tags: ['Python', 'Django', 'SQL', 'C++', 'Java'],
+              icon: '💬', title: 'AI Chatbots & Agents',
+              desc: 'Deploy an AI agent on your website or Messenger that qualifies leads, answers questions, and books calls at 2am on a Sunday — no human needed.',
+              tags: ['n8n', 'OpenAI', 'Facebook', 'Supabase'],
             },
             {
-              icon: '📞', title: 'AI Voice Agents',
-              desc: 'Voice AI workflows with VAPI that handle inbound calls, qualify leads, and book appointments — without a human on the line.',
-              tags: ['VAPI', 'OpenAI', 'n8n', 'Webhooks'],
+              icon: '🔗', title: 'Integrations & Custom APIs',
+              desc: 'Make every tool in your stack talk to each other. No more copy-pasting between your CRM, email, spreadsheets, and apps — it flows automatically.',
+              tags: ['REST APIs', 'Webhooks', 'PostgreSQL', 'Python'],
             },
           ].map((s) => (
             <motion.div className="skill-card clickable-card" key={s.title} variants={fadeUp} onClick={() => setModal({ type: 'skill', data: s })}>
@@ -503,8 +518,22 @@ export default function Page() {
               <div className="proj-body">
                 <div className="proj-tags">{p.tags.map(t => <span className="ptag" key={t}>{t}</span>)}</div>
                 <h3>{p.title}</h3>
-                <p>{p.desc}</p>
+                {p.problem ? (
+                  <>
+                    <div className="proj-block">
+                      <span className="proj-block-label">Problem</span>
+                      <p className="proj-block-text">{p.problem}</p>
+                    </div>
+                    <div className="proj-block">
+                      <span className="proj-block-label">Solution</span>
+                      <p className="proj-block-text">{p.desc}</p>
+                    </div>
+                  </>
+                ) : (
+                  <p className="proj-block-text">{p.desc}</p>
+                )}
                 <div className="proj-metrics">
+                  {p.problem && <span className="proj-result-label">Result</span>}
                   {p.metrics.map(m => (
                     <div className="metric" key={m.label}><strong>{m.val}</strong><span>{m.label}</span></div>
                   ))}
