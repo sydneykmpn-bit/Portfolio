@@ -332,45 +332,36 @@ export default function Page() {
 
       {/* HERO */}
       <section id="hero">
-        <div className="hero-left">
-          <div className="hero-tag">
-            <span className="hero-tag-dot" />
-            Open to work
-          </div>
-          <h1 className="hero-name">
-            <span className="hero-word" style={{ animationDelay: '.08s' }}>Does your business</span>{' '}
-            <span className="hero-word" style={{ animationDelay: '.2s' }}>run on</span>
-            <br />
-            <em className="hero-word" style={{ animationDelay: '.32s' }}>manual work?</em>
-            <br />
-            <span className="hero-word" style={{ animationDelay: '.44s' }}>Let&apos;s fix that.</span>
-          </h1>
-          <p className="hero-role">AI Automation Engineer · Sydney Pua Ng · Manila, PH</p>
-          <p className="hero-desc">I use AI to automate your ops and follow-ups, giving your team their time back to focus on growth, not repetitive tasks.</p>
-
-          <div className="hero-ctas">
-            <a href="#contact" className="btn-primary">Get a Free Audit →</a>
-            <a href="#projects" className="btn-outline">See Results ↓</a>
-          </div>
-
-          <div className="hero-trust">
-            <span className="hero-trust-label">Automating with</span>
-            {['n8n', 'Zapier', 'Make', 'OpenAI', 'VAPI'].map(t => (
-              <span className="hero-trust-pill" key={t}>{t}</span>
-            ))}
-          </div>
+        <div className="hero-tag">
+          <span className="hero-tag-dot" />
+          Open to work
         </div>
 
-        <div className="hero-right">
-          <div className="hero-photo-wrap">
-            <Image
-              src="/2x2.png"
-              alt="Sydney Pua Ng — AI Automation Engineer"
-              fill
-              priority
-              style={{ objectFit: 'cover', objectPosition: 'center 12%' }}
-            />
-          </div>
+        <h1 className="hero-bigname">
+          <span className="hero-word" style={{ animationDelay: '.08s' }}>Sydney Pua Ng</span>
+        </h1>
+
+        <p className="hero-role">AI Automation Engineer · Manila, PH</p>
+
+        <div className="hero-tagline">
+          <span className="hero-word" style={{ animationDelay: '.2s' }}>Does your business run on</span>{' '}
+          <em className="hero-word" style={{ animationDelay: '.32s' }}>manual work?</em>
+          <br />
+          <span className="hero-word" style={{ animationDelay: '.44s' }}>Let&apos;s fix that.</span>
+        </div>
+
+        <p className="hero-desc">I use AI to automate your ops and follow-ups, giving your team their time back to focus on growth, not repetitive tasks.</p>
+
+        <div className="hero-ctas">
+          <a href="#contact" className="btn-primary">Get a Free Audit →</a>
+          <a href="#projects" className="btn-outline">See Results ↓</a>
+        </div>
+
+        <div className="hero-trust">
+          <span className="hero-trust-label">Automating with</span>
+          {['n8n', 'Zapier', 'Make', 'OpenAI', 'VAPI'].map(t => (
+            <span className="hero-trust-pill" key={t}>{t}</span>
+          ))}
         </div>
 
         <div className="scroll-cue" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>
