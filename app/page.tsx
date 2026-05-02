@@ -11,6 +11,7 @@ const ScrollReveal     = dynamic(() => import('@/components/ScrollReveal'),     
 const CardModal        = dynamic(() => import('@/components/CardModal'),         { ssr: false });
 const VideoModal       = dynamic(() => import('@/components/VideoModal'),        { ssr: false });
 import type { ModalPayload } from '@/components/CardModal';
+import WhoIHelp from '@/components/WhoIHelp';
 
 const tools = [
   { icon: '🤖', name: 'OpenAI' }, { icon: '⚡', name: 'Groq' },
@@ -371,6 +372,9 @@ export default function Page() {
           </svg>
         </div>
       </section>
+
+      {/* WHO I HELP */}
+      <WhoIHelp />
 
       {/* ABOUT */}
       <section className="section section-alt" id="about" style={{ textAlign: 'center' }}>
