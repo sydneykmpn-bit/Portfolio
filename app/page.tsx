@@ -321,10 +321,10 @@ export default function Page() {
             Open to work
           </div>
           <h1 className="hero-name">
-            <span className="hero-word" style={{ animationDelay: '.08s' }}>Your business</span>{' '}
-            <span className="hero-word" style={{ animationDelay: '.2s' }}>runs on</span>
+            <span className="hero-word" style={{ animationDelay: '.08s' }}>Does your business</span>{' '}
+            <span className="hero-word" style={{ animationDelay: '.2s' }}>run on</span>
             <br />
-            <em className="hero-word" style={{ animationDelay: '.32s' }}>manual work.</em>
+            <em className="hero-word" style={{ animationDelay: '.32s' }}>manual work?</em>
             <br />
             <span className="hero-word" style={{ animationDelay: '.44s' }}>Let&apos;s fix that.</span>
           </h1>
