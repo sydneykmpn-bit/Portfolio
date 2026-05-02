@@ -5,14 +5,12 @@ import Image from 'next/image';
 import { useState, useEffect, useRef, memo } from 'react';
 import { motion, animate, useInView, useScroll } from 'framer-motion';
 
-const CursorEffect         = dynamic(() => import('@/components/CursorEffect'),         { ssr: false });
-const ChatWidget           = dynamic(() => import('@/components/ChatWidget'),            { ssr: false });
-const ScrollReveal         = dynamic(() => import('@/components/ScrollReveal'),          { ssr: false });
-const CardModal            = dynamic(() => import('@/components/CardModal'),             { ssr: false });
-const DraggableMarquee     = dynamic(() => import('@/components/DraggableMarquee'),     { ssr: false });
-const VideoModal           = dynamic(() => import('@/components/VideoModal'),            { ssr: false });
-const HeroWorkflowPreview  = dynamic(() => import('@/components/HeroWorkflowPreview'),  { ssr: false });
-const ResultsTicker        = dynamic(() => import('@/components/ResultsTicker'),         { ssr: false });
+const CursorEffect     = dynamic(() => import('@/components/CursorEffect'),     { ssr: false });
+const ChatWidget       = dynamic(() => import('@/components/ChatWidget'),        { ssr: false });
+const ScrollReveal     = dynamic(() => import('@/components/ScrollReveal'),      { ssr: false });
+const CardModal        = dynamic(() => import('@/components/CardModal'),         { ssr: false });
+const VideoModal       = dynamic(() => import('@/components/VideoModal'),        { ssr: false });
+const ResultsTicker    = dynamic(() => import('@/components/ResultsTicker'),     { ssr: false });
 
 import type { ModalPayload } from '@/components/CardModal';
 
@@ -122,16 +120,12 @@ const processSteps = [
 
 const testimonials = [
   {
-    initials: 'MS', name: 'Maria Santos', role: 'Operations Manager', company: 'GrowthPath PH',
-    text: 'Sydney built our lead pipeline from scratch. What used to take our VA a full day now runs on its own — 24/7. Sobrang worth it, nakita agad ang resulta.',
+    initials: 'VC', name: 'Vincent C.', role: 'Local Gym Business Owner', company: 'Velocity Fitness',
+    text: 'Every inquiry used to sit in my inbox until I had time to reply — sometimes days. Sydney built a system that responds the moment someone reaches out, qualifies them, and books a trial automatically. Our show-up rate improved and I stopped losing leads to gyms that responded faster. It paid for itself within the first two weeks.',
   },
   {
-    initials: 'JL', name: 'James Lim', role: 'Founder', company: 'Lim Digital Agency',
-    text: 'We were manually processing 50+ client reports every week. Sydney automated the entire thing in under a week. The ROI was immediate — I wish I hired him sooner.',
-  },
-  {
-    initials: 'RC', name: 'Rachel Cruz', role: 'Marketing Director', company: 'ScaleUp SaaS',
-    text: 'The AI content system tripled our publishing output without adding headcount. It just runs. Sydney built something we actually trust with our brand.',
+    initials: 'KC', name: 'Kacie C.', role: 'Local Cafe Owner', company: 'Mori Cafe',
+    text: 'I was spending every Sunday evening manually scheduling our social posts and sending supplier reminders. Sydney automated the whole thing — content goes out consistently, reminders fire on time, and I haven\'t touched it since he set it up. That time back has been genuinely life-changing for a small business owner.',
   },
 ];
 
@@ -272,7 +266,7 @@ export default function Page() {
 
       {/* NAV */}
       <nav>
-        <a className="logo" href="#"><span className="logo-mark">SKMPN</span></a>
+        <a className="logo" href="#"><span className="logo-mark">Sydney</span></a>
         <div className="nav-group">
           <ul className="nav-links">
             <li><a href="#about">About</a></li>
@@ -351,7 +345,15 @@ export default function Page() {
         </div>
 
         <div className="hero-right">
-          <HeroWorkflowPreview />
+          <div className="hero-photo-wrap">
+            <Image
+              src="/2x2.png"
+              alt="Sydney Pua Ng — AI Automation Engineer"
+              fill
+              priority
+              style={{ objectFit: 'cover', objectPosition: 'center 12%' }}
+            />
+          </div>
         </div>
 
         <div className="scroll-cue" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -365,10 +367,17 @@ export default function Page() {
       {/* RESULTS TICKER */}
       <ResultsTicker />
 
-      {/* TOOL MARQUEE */}
+      {/* TOOLS GRID */}
       <div id="tools">
         <p className="marquee-label">Stack &amp; Integrations</p>
-        <DraggableMarquee tools={tools} />
+        <div className="tools-static">
+          {tools.map(t => (
+            <div className="tool-pill-s" key={t.name}>
+              <span className="tool-icon-s">{t.icon}</span>
+              <span className="tool-name-s">{t.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ABOUT */}
@@ -552,7 +561,7 @@ export default function Page() {
 
       {/* TESTIMONIALS */}
       <section className="section" id="testimonials">
-        <div className="s-label">Social Proof</div>
+        <div className="s-label">Client Results</div>
         <h2 className="s-title">What clients<br /><em>actually say.</em></h2>
         <motion.div
           className="testimonials-grid"
@@ -563,12 +572,15 @@ export default function Page() {
         >
           {testimonials.map((t) => (
             <motion.div className="testi-card" key={t.name} variants={fadeUp}>
-              <p className="testi-text">&ldquo;{t.text}&rdquo;</p>
+              <div className="testi-quote-mark">&ldquo;</div>
+              <p className="testi-text">{t.text}</p>
+              <div className="testi-divider" />
               <div className="testi-author">
                 <div className="testi-initials">{t.initials}</div>
-                <div>
+                <div className="testi-author-info">
                   <strong>{t.name}</strong>
-                  <span>{t.role} · {t.company}</span>
+                  <span className="testi-role">{t.role}</span>
+                  <span className="testi-company">{t.company}</span>
                 </div>
               </div>
             </motion.div>
