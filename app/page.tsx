@@ -346,7 +346,7 @@ export default function Page() {
             <span className="hero-word" style={{ animationDelay: '.44s' }}>Let&apos;s fix that.</span>
           </h1>
           <p className="hero-role">AI Automation Engineer · Sydney Pua Ng · Manila, PH</p>
-          <p className="hero-desc">I build AI-powered systems that handle your lead follow-up, content publishing, client onboarding, and ops — so your team focuses on growth, not admin.</p>
+          <p className="hero-desc">I use AI to automate your ops and follow-ups, giving your team their time back to focus on growth, not repetitive tasks.</p>
 
           <div className="hero-ctas">
             <a href="#contact" className="btn-primary">Get a Free Audit →</a>
