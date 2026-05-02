@@ -108,16 +108,20 @@ const allProjects = [
 
 const TOOL_TABS = ['Make', 'n8n', 'Zapier'];
 
-const faqs = [
-  { q: 'How quickly can you build and deploy an automation?', a: 'Most workflows are live within 3–5 business days after our discovery call. Complex multi-system builds may take up to 2 weeks — I\'ll give you a clear timeline before any work begins.' },
-  { q: 'Will I need to be technical to use it?', a: 'Not at all. I build systems you can run, monitor, and manage without writing a single line of code. I document everything and walk you through it before handoff.' },
-  { q: 'What if something breaks after you finish?', a: 'Post-launch support is included. I monitor the system and fix any issues that come up — if your tools update or your workflow changes, I\'m on it.' },
-  { q: 'Can you automate something specific to my industry?', a: 'Yes — I\'ve worked across fitness, food and beverage, e-commerce, and service businesses. If your workflow is repeatable, it can be automated regardless of industry.' },
-  { q: 'Do I need existing tools or software?', a: 'No. I can work with what you already have or recommend the right stack for your budget and use case — starting from free-tier tools if needed.' },
-  { q: 'How is this different from hiring a virtual assistant?', a: 'A VA works 8 hours a day, takes breaks, and makes mistakes when tired. An automation runs 24/7, never forgets a step, and scales instantly to handle 10x the volume at the same cost.' },
-  { q: 'What are your rates?', a: 'I keep pricing flexible based on scope and complexity. The discovery call is free — that\'s where we figure out what makes sense. Scroll to Connect to book it.' },
-  { q: 'Do you offer ongoing maintenance?', a: 'Yes — retainer packages are available for businesses that want continuous updates, monitoring, and new automations built over time.' },
-  { q: 'What if I have a tool or platform you haven\'t mentioned?', a: 'I work with almost any tool or platform. Just tell me what you\'re currently using — most likely I can integrate it seamlessly.' },
+const faqsLeft = [
+  { q: 'How much do your services cost?', a: "I keep pricing flexible based on scope and complexity. The discovery call is free — that's where we figure out what makes sense. Scroll to Connect to book it." },
+  { q: 'How long does it take to build an automation?', a: "Most workflows are live within 3–5 business days after our discovery call. Complex multi-system builds may take up to 2 weeks — I'll give you a clear timeline before any work begins." },
+  { q: 'Do I need to know how to code?', a: "Not at all. I build systems you can run, monitor, and manage without writing a single line of code. I document everything and walk you through it at handoff." },
+  { q: 'What if something breaks after delivery?', a: "Post-launch support is included. I monitor the system and fix any issues that come up — if your tools update or your workflow changes, I'm on it." },
+  { q: 'Which tools and platforms do you work with?', a: "Make.com, n8n, Zapier, OpenAI, Supabase, React, Python, Webhooks, and more. If you're using it, I've most likely integrated it before." },
+];
+
+const faqsRight = [
+  { q: 'Can you work with my existing systems?', a: "Yes — I integrate with the tools you already use. No need to rip and replace your current stack. I build on top of what you have." },
+  { q: 'Do you offer ongoing support after the project?', a: "Yes — retainer packages are available for businesses that want continuous updates, monitoring, and new automations built over time." },
+  { q: 'How do we get started?', a: "Book a free 30-minute audit call via the Connect section. I'll map your current workflow and show you exactly what's worth automating — and what that's worth." },
+  { q: "What if I have a tool or platform you haven't mentioned?", a: "I work with almost any tool or platform. Just tell me what you're currently using — most likely I can integrate it seamlessly." },
+  { q: 'How quickly can you build and deploy an automation?', a: "Simple workflows can go live in as little as 24–48 hours. Multi-system builds are typically done within a week. Speed depends on complexity and your tool access." },
 ];
 
 const processSteps = [
@@ -201,7 +205,8 @@ export default function Page() {
   const [formError, setFormError] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaqL, setOpenFaqL] = useState<number | null>(null);
+  const [openFaqR, setOpenFaqR] = useState<number | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
@@ -610,24 +615,45 @@ export default function Page() {
       <section className="section" id="faq">
         <div className="s-label">FAQ</div>
         <h2 className="s-title">Common questions<br /><em>answered.</em></h2>
-        <div className="faq-list">
-          {faqs.map((item, i) => (
-            <div
-              key={i}
-              className={`faq-item${openFaq === i ? ' open' : ''}`}
-              onClick={() => setOpenFaq(openFaq === i ? null : i)}
-            >
-              <div className="faq-question">
-                <span>{item.q}</span>
-                <svg className="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
+        <div className="faq-cols">
+          <div className="faq-col">
+            {faqsLeft.map((item, i) => (
+              <div
+                key={i}
+                className={`faq-item${openFaqL === i ? ' open' : ''}`}
+                onClick={() => setOpenFaqL(openFaqL === i ? null : i)}
+              >
+                <div className="faq-question">
+                  <span>{item.q}</span>
+                  <div className="faq-toggle">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="faq-answer"><p>{item.a}</p></div>
               </div>
-              <div className="faq-answer">
-                <p>{item.a}</p>
+            ))}
+          </div>
+          <div className="faq-col">
+            {faqsRight.map((item, i) => (
+              <div
+                key={i}
+                className={`faq-item${openFaqR === i ? ' open' : ''}`}
+                onClick={() => setOpenFaqR(openFaqR === i ? null : i)}
+              >
+                <div className="faq-question">
+                  <span>{item.q}</span>
+                  <div className="faq-toggle">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="faq-answer"><p>{item.a}</p></div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
