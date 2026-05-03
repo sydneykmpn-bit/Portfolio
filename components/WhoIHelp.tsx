@@ -69,12 +69,16 @@ const WhoIHelp = memo(function WhoIHelp() {
           <motion.div
             key={title}
             variants={fadeUp}
-            className="flex flex-col items-center rounded-2xl p-8"
+            whileHover={{
+              y: -4,
+              boxShadow: '0 24px 48px -10px rgba(59,130,246,.28), 0 0 0 1px rgba(59,130,246,.32), inset 0 1px 0 rgba(255,255,255,.06)',
+              transition: { type: 'spring', stiffness: 300, damping: 22 },
+            }}
+            className="flex flex-col items-center rounded-2xl p-8 cursor-default"
             style={{
               background: 'rgba(8,13,26,.92)',
               border: '1px solid rgba(59,130,246,.14)',
-              boxShadow:
-                '0 20px 40px -15px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.04)',
+              boxShadow: '0 20px 40px -15px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.04)',
             }}
           >
             <Icon
@@ -94,7 +98,7 @@ const WhoIHelp = memo(function WhoIHelp() {
             </h3>
             <p
               style={{
-                color: 'var(--muted)',
+                color: 'rgba(200,215,255,.82)',
                 fontSize: '.84rem',
                 marginTop: '.5rem',
                 lineHeight: 1.65,

@@ -397,56 +397,90 @@ export default function Page() {
           <div className="flex-1 min-w-0">
             <div className="s-label">About</div>
             <h2 className="s-title">Manual work slows you down<br /><em>more than you think.</em></h2>
-            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
-              I help businesses cut out repetitive tasks using automation — so your team can focus on what actually grows the business.
+            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none', marginBottom: '1.1rem' }}>
+              I help businesses eliminate the repetitive tasks that slow them down — using automation connected seamlessly to the tools they already use.
             </p>
-            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
-              If you&apos;re manually following up with leads, scheduling content by hand, or pulling the same reports every week, you&apos;re losing time and money. I build systems that handle this stuff automatically using tools like Zapier, Make, and n8n — connected to what you already use.
-            </p>
-            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
-              <strong>No new software to learn. No engineers needed.</strong> Just workflows that run on their own and keep working long after we&apos;re done.
-            </p>
-            <p className="about-lead" style={{ marginLeft: 0, marginRight: 0, maxWidth: 'none' }}>
-              I&apos;ve automated lead pipelines, content publishing, data processing, AI chatbots, and appointment booking for clients who were tired of doing the same tasks over and over.
-            </p>
+            <ul className="about-checklist">
+              {[
+                'No new software to learn.',
+                'No engineers needed.',
+                'Runs 24/7 without you.',
+                'Connected to the tools you already use.',
+              ].map((item) => (
+                <li key={item}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <a
+              href="mailto:sydneykmpn@gmail.com"
+              className="btn-primary"
+              style={{ display: 'inline-block', marginBottom: '2.2rem' }}
+            >
+              Book a Free Automation Audit
+            </a>
             <motion.div
               className="about-stats"
-              style={{ gridTemplateColumns: 'repeat(2,1fr)', maxWidth: 'none', margin: '2.2rem 0 2rem' }}
+              style={{ gridTemplateColumns: 'repeat(2,1fr)', maxWidth: 'none', margin: '0 0 2rem' }}
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: '-60px' }}
             >
-              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={10} suffix="+" /></strong><span>automations delivered</span></motion.div>
-              <motion.div className="astat" variants={fadeUp}><strong><AnimatedCounter to={30} suffix="hrs+" /></strong><span>Saved per client/week</span></motion.div>
-              <motion.div className="astat" variants={fadeUp}><strong>24/7</strong><span>Runs without you</span></motion.div>
+              <motion.div className="astat" variants={fadeUp}>
+                <div className="astat-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <strong><AnimatedCounter to={10} suffix="+" /></strong>
+                <span>automations delivered</span>
+              </motion.div>
+              <motion.div className="astat" variants={fadeUp}>
+                <div className="astat-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <strong><AnimatedCounter to={30} suffix="hrs+" /></strong>
+                <span>Saved per client/week</span>
+              </motion.div>
+              <motion.div className="astat" variants={fadeUp}>
+                <div className="astat-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <strong>24/7</strong>
+                <span>Runs without you</span>
+              </motion.div>
               <motion.div className="astat astat-worldwide" variants={fadeUp}>
+                <div className="astat-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                </div>
                 <span className="astat-worldwide-text">Remote<br />worldwide</span>
               </motion.div>
             </motion.div>
-            <p className="about-cta-lead">If your team is stuck doing manual work that could run itself, let&apos;s talk about fixing it.</p>
             <a href="#contact" className="btn-primary">Start the conversation →</a>
           </div>
 
-          {/* RIGHT — Portrait */}
-          <div className="flex-shrink-0 w-full lg:w-[400px]">
-            <div style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '420px',
-              aspectRatio: '3/4',
-              borderRadius: '1.5rem',
-              overflow: 'hidden',
-              border: '1px solid rgba(59,130,246,.22)',
-              background: 'rgba(0,0,0,.5)',
-              boxShadow: '0 48px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(59,130,246,.07), inset 0 1px 0 rgba(255,255,255,.07)',
-              margin: '0 auto',
-            }}>
+          {/* RIGHT — Portrait with ambient glow */}
+          <div className="flex-shrink-0 w-full lg:w-[400px] flex items-center justify-center">
+            <div style={{ position: 'relative', width: '100%', maxWidth: '420px', margin: '0 auto' }}>
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  inset: '-18%',
+                  background: 'radial-gradient(ellipse 72% 72% at 50% 60%, rgba(59,130,246,.3), rgba(139,92,246,.18), transparent 70%)',
+                  filter: 'blur(44px)',
+                  zIndex: 0,
+                  pointerEvents: 'none',
+                }}
+              />
               <Image
-                src="/2x2.png"
+                src="/profile-transparent.png"
                 alt="Sydney Pua Ng — AI Automation Engineer"
-                fill
-                style={{ objectFit: 'cover', objectPosition: 'center 12%' }}
+                width={420}
+                height={520}
+                style={{ width: '100%', height: 'auto', position: 'relative', zIndex: 1, display: 'block' }}
               />
             </div>
           </div>
@@ -617,22 +651,68 @@ export default function Page() {
       <section className="section section-alt" id="process">
         <div className="s-label">How I Work</div>
         <h2 className="s-title">From first call to<br /><em>live system.</em></h2>
-        <motion.div
-          className="process-grid"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-        >
-          {processSteps.map((step) => (
-            <motion.div className="process-step" key={step.num} variants={fadeUp}>
-              <div className="process-num">{step.num}</div>
-              <div className="process-icon">{step.icon}</div>
-              <h3>{step.title}</h3>
-              <p>{step.desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="relative mt-14">
+          {/* Desktop horizontal connector */}
+          <div
+            className="hidden md:block absolute pointer-events-none"
+            style={{
+              top: '19px',
+              left: 'calc(10% + 20px)',
+              right: 'calc(10% + 20px)',
+              height: '1px',
+              background: 'linear-gradient(90deg, transparent, rgba(59,130,246,.5) 15%, rgba(34,211,238,.4) 50%, rgba(59,130,246,.5) 85%, transparent)',
+            }}
+            aria-hidden="true"
+          />
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-5 md:gap-4"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            {processSteps.map((step, i) => (
+              <motion.div
+                key={step.num}
+                variants={fadeUp}
+                className={`flex flex-row md:flex-col md:items-center md:text-center gap-5 md:gap-0 relative${i < processSteps.length - 1 ? ' pb-10 md:pb-0' : ''}`}
+              >
+                {/* Mobile vertical connector */}
+                {i < processSteps.length - 1 && (
+                  <div
+                    className="md:hidden absolute w-px"
+                    style={{ left: '19px', top: '40px', bottom: '0', background: 'linear-gradient(to bottom, rgba(59,130,246,.45), rgba(59,130,246,.08))' }}
+                    aria-hidden="true"
+                  />
+                )}
+                {/* Step circle */}
+                <div
+                  className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center relative z-10 md:mb-5"
+                  style={{ background: 'rgba(8,13,26,.95)', border: '1.5px solid rgba(59,130,246,.55)', boxShadow: '0 0 20px rgba(59,130,246,.22)' }}
+                >
+                  <span style={{ fontFamily: "'Archivo Black'", fontSize: '.66rem', color: '#22d3ee', letterSpacing: '.08em' }}>
+                    {step.num}
+                  </span>
+                </div>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center mb-2 md:mx-auto"
+                    style={{ background: 'rgba(59,130,246,.1)' }}
+                  >
+                    <span style={{ fontSize: '1.1rem' }}>{step.icon}</span>
+                  </div>
+                  <h3 style={{ fontFamily: "'Syne'", fontSize: '.94rem', fontWeight: 700, marginBottom: '.38rem' }}>
+                    {step.title}
+                  </h3>
+                  <p style={{ color: 'rgba(221,230,255,.65)', fontSize: '.8rem', lineHeight: 1.72 }}>
+                    {step.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* FAQ */}
