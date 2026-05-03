@@ -479,7 +479,7 @@ export default function Page() {
                 }}
               />
               <Image
-                src="/profile-transparent.png"
+                src="/2x2.png"
                 alt="Sydney Pua Ng — AI Automation Engineer"
                 width={420}
                 height={520}
@@ -710,74 +710,6 @@ export default function Page() {
             <button onClick={() => setActiveTab('All')}>View all</button>
           </div>
         )}
-      </section>
-
-      {/* PROCESS — How I Work */}
-      <section className="section section-alt" id="process">
-        <div className="s-label">How I Work</div>
-        <h2 className="s-title">From first call to<br /><em>live system.</em></h2>
-        <div className="relative mt-14">
-          {/* Desktop horizontal connector */}
-          <div
-            className="hidden md:block absolute pointer-events-none"
-            style={{
-              top: '19px',
-              left: 'calc(10% + 20px)',
-              right: 'calc(10% + 20px)',
-              height: '1px',
-              background: 'linear-gradient(90deg, transparent, rgba(59,130,246,.5) 15%, rgba(34,211,238,.4) 50%, rgba(59,130,246,.5) 85%, transparent)',
-            }}
-            aria-hidden="true"
-          />
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-5 md:gap-4"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-          >
-            {processSteps.map((step, i) => (
-              <motion.div
-                key={step.num}
-                variants={fadeUp}
-                className={`flex flex-row md:flex-col md:items-center md:text-center gap-5 md:gap-0 relative${i < processSteps.length - 1 ? ' pb-10 md:pb-0' : ''}`}
-              >
-                {/* Mobile vertical connector */}
-                {i < processSteps.length - 1 && (
-                  <div
-                    className="md:hidden absolute w-px"
-                    style={{ left: '19px', top: '40px', bottom: '0', background: 'linear-gradient(to bottom, rgba(59,130,246,.45), rgba(59,130,246,.08))' }}
-                    aria-hidden="true"
-                  />
-                )}
-                {/* Step circle */}
-                <div
-                  className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center relative z-10 md:mb-5"
-                  style={{ background: 'rgba(8,13,26,.95)', border: '1.5px solid rgba(59,130,246,.55)', boxShadow: '0 0 20px rgba(59,130,246,.22)' }}
-                >
-                  <span style={{ fontFamily: "'Archivo Black'", fontSize: '.66rem', color: '#22d3ee', letterSpacing: '.08em' }}>
-                    {step.num}
-                  </span>
-                </div>
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center mb-2 md:mx-auto"
-                    style={{ background: 'rgba(59,130,246,.1)' }}
-                  >
-                    <span style={{ fontSize: '1.1rem' }}>{step.icon}</span>
-                  </div>
-                  <h3 style={{ fontFamily: "'Syne'", fontSize: '.94rem', fontWeight: 700, marginBottom: '.38rem' }}>
-                    {step.title}
-                  </h3>
-                  <p style={{ color: 'rgba(221,230,255,.65)', fontSize: '.8rem', lineHeight: 1.72 }}>
-                    {step.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
       </section>
 
       {/* FAQ */}
