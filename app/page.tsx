@@ -29,9 +29,9 @@ const allProjects = [
   // ── Featured (has screenshot) ──────────────────────────────────
   {
     category: 'n8n',
-    icon: '💬', tags: ['n8n', 'Facebook Messenger', 'OpenAI', 'AI'], title: 'Facebook AI Agent Chatbot',
-    problem: "Client's Facebook Page was getting 80+ messages/day. Team spending 3 hours daily copy-pasting the same answers.",
-    desc: 'Built a production AI chatbot on n8n that reads each Messenger message, understands intent, pulls product info from a knowledge base, and replies instantly — escalating to a human only when genuinely needed.',
+    icon: '💬', tags: ['n8n', 'Facebook Messenger', 'OpenAI', 'AI'], title: 'Facebook Messenger AI Chatbot with Intelligent Image Automation',
+    problem: "Client's Facebook Page was getting 80+ messages/day. One man team was spending 3 hours daily copy-pasting the same answers.",
+    desc: 'Developed a fully automated AI-powered customer service chatbot for a local gym business that operates 24/7 via Facebook Messenger, handling inquiries about gym memberships, court rentals, and booking—while intelligently sending contextual images based on customer keywords',
     metrics: [{ val: '24/7', label: 'Available' }, { val: '0', label: 'Human needed' }],
     img: '/AI_Agent.png',
   },
