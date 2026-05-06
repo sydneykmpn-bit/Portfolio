@@ -478,8 +478,8 @@ export default function Page() {
               variants={fadeUp}
               whileHover={{ y: -4, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
               style={{
-                background: 'var(--bg-surface)',
-                border: '1px solid var(--border)',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--bdr)',
                 borderRadius: '1.25rem',
                 padding: '1.5rem 1.25rem',
                 display: 'flex',
@@ -493,6 +493,7 @@ export default function Page() {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '.6rem' }}>
                 <div
+                  className="process-num-badge"
                   style={{
                     width: '28px',
                     height: '28px',
@@ -506,7 +507,7 @@ export default function Page() {
                     flexShrink: 0,
                   }}
                 >
-                  <span style={{ fontFamily: "'Archivo Black'", fontSize: '.58rem', color: '#22d3ee', letterSpacing: '.08em' }}>
+                  <span className="process-num-text" style={{ fontFamily: "'Archivo Black'", fontSize: '.58rem', color: '#22d3ee', letterSpacing: '.08em' }}>
                     {step.num}
                   </span>
                 </div>
@@ -529,7 +530,8 @@ export default function Page() {
                 {step.title}
               </h3>
               <p
-                style={{ color: 'rgba(221,230,255,.65)', fontSize: '.8rem', lineHeight: 1.72, margin: 0 }}
+                className="process-card-desc"
+                style={{ fontSize: '.8rem', lineHeight: 1.72, margin: 0 }}
                 dangerouslySetInnerHTML={{ __html: step.desc }}
               />
             </motion.div>
