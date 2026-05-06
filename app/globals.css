@@ -25,7 +25,7 @@ html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 
 /* ── CURSOR GLOW ── */
-#curGlow{position:fixed;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.36) 0%,rgba(59,130,246,.16) 38%,transparent 68%);pointer-events:none;z-index:1;transform:translate(-50%,-50%);will-change:left,top;}
+#curGlow{position:fixed;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.36) 0%,rgba(59,130,246,.16) 38%,transparent 68%);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:left,top;}
 [data-theme="light"] #curGlow{background:radial-gradient(circle,rgba(59,130,246,.7) 0%,rgba(37,99,235,.38) 38%,transparent 66%);}
 
 /* ── ANIMATED BACKGROUND ── */

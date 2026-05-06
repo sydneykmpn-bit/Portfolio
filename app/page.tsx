@@ -13,7 +13,7 @@ const VideoModal       = dynamic(() => import('@/components/VideoModal'),       
 import type { ModalPayload } from '@/components/CardModal';
 
 const tools = [
-  { icon: '🤖', name: 'OpenAI' }, { icon: '⚡', name: 'Groq' },
+  { icon: '🤖', name: 'OpenAI' }, { icon: '✦', name: 'Claude' }, { icon: '⚡', name: 'Groq' },
   { icon: '🔗', name: 'LangChain' }, { icon: '🔧', name: 'Make.com' },
   { icon: '🌐', name: 'n8n' }, { icon: '⚙️', name: 'Zapier' },
   { icon: '🚀', name: 'Next.js' }, { icon: '⚛️', name: 'React' },
@@ -851,16 +851,16 @@ export default function Page() {
               )}
             </div>
 
-            {/* Resume card */}
+            {/* CV card */}
             <div className="resume-card">
               <div className="resume-icon">📄</div>
               <div className="resume-info">
-                <strong>Resume</strong>
+                <strong>CV</strong>
                 <span>AI Automation Engineer &amp; Software Developer</span>
               </div>
-              <a href="/resume.pdf" download="PuaNg_Resume" className="btn-download">
+              <a href="/PuaNg_CV.pdf" download="PuaNg_CV" className="btn-download">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                Download PDF
+                View CV
               </a>
             </div>
 
