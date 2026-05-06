@@ -24,11 +24,26 @@
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 
-/* ── CURSOR GLOW ── */
-#curGlow{position:fixed;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.36) 0%,rgba(59,130,246,.16) 38%,transparent 68%);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:left,top;}
+/* ── CURSOR GLOW + DOT ── */
+/* left/top are static offsets (half size) so only x/y transforms animate */
+#curGlow{position:fixed;left:-190px;top:-190px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.36) 0%,rgba(59,130,246,.16) 38%,transparent 68%);pointer-events:none;z-index:9998;will-change:transform;}
 [data-theme="light"] #curGlow{background:radial-gradient(circle,rgba(59,130,246,.7) 0%,rgba(37,99,235,.38) 38%,transparent 66%);}
+#curDot{position:fixed;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:rgba(59,130,246,.85);pointer-events:none;z-index:9999;will-change:transform;}
+[data-theme="light"] #curDot{background:rgba(29,78,216,.9);}
+@media(pointer:coarse){#curDot{display:none;}}
 
-/* ── ANIMATED BACKGROUND ── */
+/* ── ANIMATED BACKGROUND BLOBS ── */
+/* z-index:0 renders after bg-canvas (DOM order), so blobs sit above it */
+.anim-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.anim-blob{position:absolute;border-radius:50%;filter:blur(80px);}
+.anim-blob-1{width:65vw;height:65vw;top:-5%;left:-15%;background:radial-gradient(circle,rgba(29,78,216,.25) 0%,transparent 70%);}
+.anim-blob-2{width:55vw;height:55vw;top:35%;right:-10%;background:radial-gradient(circle,rgba(14,116,144,.2) 0%,transparent 70%);}
+.anim-blob-3{width:50vw;height:50vw;bottom:-8%;left:20%;background:radial-gradient(circle,rgba(59,130,246,.18) 0%,transparent 70%);}
+[data-theme="light"] .anim-blob-1{background:radial-gradient(circle,rgba(29,78,216,.1) 0%,transparent 70%);}
+[data-theme="light"] .anim-blob-2{background:radial-gradient(circle,rgba(14,116,144,.07) 0%,transparent 70%);}
+[data-theme="light"] .anim-blob-3{background:radial-gradient(circle,rgba(59,130,246,.07) 0%,transparent 70%);}
+
+/* ── STATIC BACKGROUND CANVAS (base color + dot grid) ── */
 .bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--bg);overflow:hidden;}
 .bg-canvas::before{
   content:'';position:absolute;inset:-30%;
@@ -745,9 +760,9 @@ footer small{color:var(--muted);font-size:.77rem;}
 [data-theme="light"] .mob-panel{background:var(--bg2);}
 [data-theme="light"] .mob-close{background:rgba(0,0,0,.04);}
 
-/* ── DISABLE CURSOR GLOW ON TOUCH DEVICES ── */
+/* ── DISABLE CURSOR ON TOUCH DEVICES ── */
 @media(pointer:coarse){
-  #curGlow{display:none;}
+  #curGlow,#curDot{display:none;}
 }
 
 /* ── HERO TRUST BAR ── */
@@ -822,7 +837,7 @@ footer small{color:var(--muted);font-size:.77rem;}
 
 /* ── BACK TO TOP ── */
 .back-to-top{
-  position:fixed;bottom:6.5rem;right:2rem;z-index:490;
+  position:fixed;bottom:8rem;right:2rem;z-index:490;
   width:40px;height:40px;border-radius:50%;
   background:var(--bg3);border:1.5px solid var(--bdr2);
   display:flex;align-items:center;justify-content:center;
@@ -861,7 +876,7 @@ footer small{color:var(--muted);font-size:.77rem;}
   .contact-ctas{flex-direction:column;align-items:flex-start;gap:.8rem;}
   .btn-contact{justify-content:center;}
   #fab{bottom:1.5rem;right:1.5rem;width:60px;height:60px;font-size:1.5rem;}
-  .back-to-top{bottom:6rem;right:1.5rem;width:36px;height:36px;}
+  .back-to-top{bottom:7.5rem;right:1.5rem;width:36px;height:36px;}
   .process-grid{grid-template-columns:repeat(2,1fr);gap:1rem;}
   .process-card{border-left:3px solid var(--p1)!important;border-radius:1rem!important;}
   .faq-cols{grid-template-columns:1fr;gap:1rem;}
