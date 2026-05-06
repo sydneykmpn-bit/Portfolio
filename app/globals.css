@@ -24,13 +24,6 @@
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 
-/* ── CURSOR GLOW + DOT ── */
-/* left/top are static offsets (half size) so only x/y transforms animate */
-#curGlow{position:fixed;left:-190px;top:-190px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.36) 0%,rgba(59,130,246,.16) 38%,transparent 68%);pointer-events:none;z-index:9998;will-change:transform;}
-[data-theme="light"] #curGlow{background:radial-gradient(circle,rgba(59,130,246,.7) 0%,rgba(37,99,235,.38) 38%,transparent 66%);}
-#curDot{position:fixed;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:rgba(59,130,246,.85);pointer-events:none;z-index:9999;will-change:transform;}
-[data-theme="light"] #curDot{background:rgba(29,78,216,.9);}
-@media(pointer:coarse){#curDot{display:none;}}
 
 /* ── ANIMATED BACKGROUND BLOBS ── */
 /* z-index:0 renders after bg-canvas (DOM order), so blobs sit above it */
@@ -759,11 +752,6 @@ footer small{color:var(--muted);font-size:.77rem;}
 .mob-links a:hover svg,.mob-links a:active svg{color:var(--p1);transform:translateX(3px);}
 [data-theme="light"] .mob-panel{background:var(--bg2);}
 [data-theme="light"] .mob-close{background:rgba(0,0,0,.04);}
-
-/* ── DISABLE CURSOR ON TOUCH DEVICES ── */
-@media(pointer:coarse){
-  #curGlow,#curDot{display:none;}
-}
 
 /* ── HERO TRUST BAR ── */
 .hero-trust{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;justify-content:center;margin-top:1.8rem;animation:up .55s .38s ease both;}

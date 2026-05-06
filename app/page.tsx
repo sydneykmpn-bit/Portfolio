@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useState, useEffect, memo } from 'react';
 import { motion, useScroll, AnimatePresence } from 'framer-motion';
 
-const CursorEffect       = dynamic(() => import('@/components/CursorEffect'),       { ssr: false });
 const CursorTrail        = dynamic(() => import('@/components/CursorTrail'),        { ssr: false });
 const AnimatedBackground = dynamic(() => import('@/components/AnimatedBackground'), { ssr: false });
 const ChatWidget         = dynamic(() => import('@/components/ChatWidget'),          { ssr: false });
@@ -268,7 +267,6 @@ export default function Page() {
   return (
     <>
       <style>{`@keyframes ring-spin { to { transform: rotate(360deg); } }`}</style>
-      <CursorEffect />
       <CursorTrail />
       <ScrollReveal />
       <div className="bg-canvas" />
