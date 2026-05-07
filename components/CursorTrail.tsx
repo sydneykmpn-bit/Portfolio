@@ -3,104 +3,128 @@
 import { useEffect, useRef, memo } from 'react';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TUNING — change these without touching the animation logic
+// CONFIG — mirrors the original vanilla-JS / CSS values exactly
+// Changing COUNT / SIZE / EASE changes the animation feel;
+// the colour arrays and theme logic are the only intentional additions.
 // ─────────────────────────────────────────────────────────────────────────────
-const COUNT      = 18;   // total trail particles
-const LEAD_LERP  = 0.20; // lead dot lag factor (1 = instant snap)
-const LERP_DECAY = 0.010; // how much slower each subsequent dot is
-const MIN_LERP   = 0.042; // floor so the tail never fully stops
+const COUNT = 20;    // 20 circle divs  (matches original HTML)
+const SIZE  = 24;    // px              (matches original CSS)
+const HALF  = SIZE / 2;
+const EASE  = 0.3;   // lerp factor     (matches original JS — do NOT change)
 
 // ─────────────────────────────────────────────────────────────────────────────
-// COLOR PALETTES  (18 stops — index 0 = lead / front, index 17 = tail / back)
+// COLOUR PALETTES
+// 22 stops per palette → index wraps via (i % palette.length), matching the
+// original `colors[index % colors.length]` pattern.
 // ─────────────────────────────────────────────────────────────────────────────
 
-// DARK MODE: bright glowing cyan/sky → deep navy
-// The lead particles pop on dark backgrounds; the trail sinks into shadow.
-const DARK: readonly string[] = [
-  '#E0F2FE', // sky-100  ← lead (brightest)
-  '#BAE6FD', // sky-200
-  '#7DD3FC', // sky-300
-  '#38BDF8', // sky-400
-  '#0EA5E9', // sky-500
-  '#38BDF8', // sky-400  (doubles back for a softer mid-gradient)
-  '#0EA5E9', // sky-500
-  '#0284C7', // sky-600
-  '#0369A1', // sky-700
-  '#075985', // sky-800
-  '#60A5FA', // blue-400
-  '#3B82F6', // blue-500
-  '#2563EB', // blue-600
-  '#1D4ED8', // blue-700
-  '#1E40AF', // blue-800
+/**
+ * LIGHT MODE — deep navy at the lead, fading toward near-invisible sky at the tail.
+ * High-contrast on white / light-grey backgrounds.
+ */
+const LIGHT_COLORS: readonly string[] = [
+  '#0F172A', // slate-950  ← circle 0  (lead — darkest, max contrast)
+  '#0F172A', // slate-950  ← circle 1
   '#1E3A8A', // blue-900
-  '#1E3A8A', // blue-900
-  '#172554', // blue-950 ← tail (deepest)
-];
-
-// LIGHT MODE: deep saturated navy → medium sky-blue
-// The lead particles are the darkest so they stand out on white backgrounds;
-// the tail fades toward lighter, almost-invisible blues.
-const LIGHT: readonly string[] = [
-  '#1E3A8A', // blue-900 ← lead (most visible on white)
   '#1E40AF', // blue-800
   '#1D4ED8', // blue-700
   '#2563EB', // blue-600
-  '#2563EB', // blue-600
-  '#1D4ED8', // blue-700 (reinforcing the deep section)
-  '#3B82F6', // blue-500
-  '#2563EB', // blue-600
+  '#2563EB', // blue-600   (reinforced mid-point for a richer gradient)
   '#3B82F6', // blue-500
   '#3B82F6', // blue-500
   '#60A5FA', // blue-400
   '#60A5FA', // blue-400
   '#93C5FD', // blue-300
-  '#60A5FA', // blue-400
   '#93C5FD', // blue-300
   '#BAE6FD', // sky-200
   '#BFDBFE', // blue-200
-  '#E0F2FE', // sky-100  ← tail (fades into white background)
+  '#DBEAFE', // blue-100
+  '#DBEAFE', // blue-100
+  '#EFF6FF', // blue-50
+  '#EFF6FF', // blue-50
+  '#F0F9FF', // sky-50    (tail — barely visible on white)
+  '#F0F9FF', // sky-50
+  '#F0F9FF', // sky-50
+];
+
+/**
+ * DARK MODE — bright cyan at the lead, sinking to deep navy at the tail.
+ * The lead circles glow; the tail dissolves naturally into the dark background.
+ */
+const DARK_COLORS: readonly string[] = [
+  '#E0F2FE', // sky-100    ← circle 0  (lead — brightest/glowing)
+  '#BAE6FD', // sky-200    ← circle 1
+  '#7DD3FC', // sky-300
+  '#7DD3FC', // sky-300    (reinforced)
+  '#38BDF8', // sky-400
+  '#38BDF8', // sky-400
+  '#0EA5E9', // sky-500
+  '#0EA5E9', // sky-500
+  '#0284C7', // sky-600
+  '#0369A1', // sky-700
+  '#0369A1', // sky-700
+  '#075985', // sky-800
+  '#60A5FA', // blue-400   (blend into blue family)
+  '#3B82F6', // blue-500
+  '#2563EB', // blue-600
+  '#1D4ED8', // blue-700
+  '#1D4ED8', // blue-700
+  '#1E40AF', // blue-800
+  '#1E3A8A', // blue-900
+  '#1E3A8A', // blue-900
+  '#172554', // blue-950   (tail — sinks into dark background)
+  '#172554', // blue-950
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // THEME HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
-function isDarkTheme(): boolean {
-  // 1. Check data-theme attribute (our ThemeToggle uses this)
+
+/**
+ * Three-level detection — picks up your ThemeToggle (data-theme attr),
+ * Tailwind dark-mode classes, and the OS prefers-color-scheme fallback.
+ */
+function isDark(): boolean {
   const attr = document.documentElement.getAttribute('data-theme');
   if (attr === 'dark')  return true;
   if (attr === 'light') return false;
-  // 2. Fallback to class-based check
   if (document.documentElement.classList.contains('dark'))  return true;
   if (document.documentElement.classList.contains('light')) return false;
-  // 3. Final fallback: OS preference
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-// Apply the correct color palette + glow/shadow to every trail node.
-// Called once on mount and again whenever the theme changes.
-function applyPalette(nodes: HTMLDivElement[], dark: boolean): void {
-  const palette = dark ? DARK : LIGHT;
-  nodes.forEach((el, i) => {
-    const t  = i / (COUNT - 1); // 0 = lead, 1 = tail
-    const ci = Math.min(i, palette.length - 1);
-    el.style.background = palette[ci];
+/**
+ * Writes background-color + box-shadow to every node in one pass.
+ * Called once on mount and again whenever the theme attribute changes.
+ * The CSS transition on each node (0.4s ease) handles the smooth crossfade.
+ */
+function applyColors(nodes: HTMLDivElement[], dark: boolean): void {
+  const palette = dark ? DARK_COLORS : LIGHT_COLORS;
 
+  nodes.forEach((node, i) => {
+    // Colour — wraps via modulo, same as the original `colors[index % colors.length]`
+    node.style.backgroundColor = palette[i % palette.length];
+
+    // Glow box-shadow — dark mode only, fades out after the first 4 circles
     if (dark) {
-      // Glowing outer halo — only meaningful on the first ~5 dots
-      const glowPx    = Math.round(Math.max(0, 12 - t * 16));
-      const glowAlpha = Math.max(0, 0.70 - t * 0.95);
-      el.style.boxShadow =
-        glowAlpha > 0.04
-          ? `0 0 ${glowPx}px rgba(56,189,248,${glowAlpha.toFixed(2)}),` +
-            `0 0 ${glowPx * 2}px rgba(14,165,233,${(glowAlpha * 0.35).toFixed(2)})`
-          : 'none';
+      // Pre-computed glow values for circles 0–3; none beyond that
+      const glowSizes  = [14, 11, 8, 5];
+      const glowAlphas = [0.72, 0.55, 0.38, 0.22];
+      if (i < 4) {
+        const px = glowSizes[i];
+        const a  = glowAlphas[i];
+        node.style.boxShadow =
+          `0 0 ${px}px rgba(56,189,248,${a}), ` +
+          `0 0 ${px * 2}px rgba(14,165,233,${(a * 0.35).toFixed(2)})`;
+      } else {
+        node.style.boxShadow = 'none';
+      }
     } else {
-      // Subtle downward shadow helps the trail stay legible on very light pages
-      const sAlpha = Math.max(0, 0.28 - t * 0.32);
-      const sPx    = Math.round(Math.max(0, 6 - t * 7));
-      el.style.boxShadow =
-        sAlpha > 0.02
-          ? `0 1px ${sPx}px rgba(30,58,138,${sAlpha.toFixed(2)})`
+      // Light mode: very subtle inset shadow to lift circles off white pages
+      const shadowAlpha = Math.max(0, 0.18 - (i / COUNT) * 0.2);
+      node.style.boxShadow =
+        shadowAlpha > 0.02
+          ? `0 2px 6px rgba(30,58,138,${shadowAlpha.toFixed(2)})`
           : 'none';
     }
   });
@@ -109,88 +133,68 @@ function applyPalette(nodes: HTMLDivElement[], dark: boolean): void {
 // ─────────────────────────────────────────────────────────────────────────────
 // COMPONENT
 // ─────────────────────────────────────────────────────────────────────────────
-interface Cfg { ox: number; oy: number; }
-
 export default memo(function CursorTrail() {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Skip entirely on touch / stylus — no mouse to follow, saves battery
+    // Skip on touch / stylus devices — mouse trail makes no sense there
     if (window.matchMedia('(pointer:coarse)').matches) return;
 
     const root = rootRef.current!;
-    const cfgs:  Cfg[]           = [];
     const nodes: HTMLDivElement[] = [];
 
-    // ── Build DOM nodes (once) ──────────────────────────────────────────────
+    // ── Build 20 circle nodes ─────────────────────────────────────────────────
+    // Mirrors the 20 <div class="circle"> in the vanilla HTML.
+    // Static styles are set here once; only transform, background, and
+    // box-shadow are written per-frame / per-theme-change.
     for (let i = 0; i < COUNT; i++) {
-      const t = i / (COUNT - 1);
-
-      // Size: lead is largest (12 px wide), tail is smallest (3.5 px wide)
-      const w = Math.max(3.5, 12 - t * 8.5);
-      const h = w * 1.55; // ~1.55:1 ratio gives the teardrop proportions
-
-      // Opacity: fully opaque lead → nearly invisible tail
-      const opacity = Math.max(0.05, 1 - t * 0.95);
-
-      // Blur: the first 3 dots stay crisp; trailing ones get up to 1.4 px blur
-      // This creates a subtle depth-of-field feel without hurting perf
-      const blur = i < 3 ? 0 : Math.min((t - 0.15) * 1.8, 1.4);
-
-      cfgs.push({ ox: w / 2, oy: h / 2 });
-
-      const styles = [
+      const el = document.createElement('div');
+      el.style.cssText = [
         'position:absolute',
-        `width:${w.toFixed(2)}px`,
-        `height:${h.toFixed(2)}px`,
-        // Teardrop shape:
-        //   horizontal radii   — 50% on all four corners (makes it oval)
-        //   vertical radii     — 12% on top corners (nearly-flat → looks pointed)
-        //                        50% on bottom corners (full half-circle)
-        'border-radius:50% 50% 50% 50% / 12% 12% 50% 50%',
-        `opacity:${opacity.toFixed(3)}`,
-        // Start far off-screen so there's no flash before the first mousemove
-        'transform:translate3d(-9999px,-9999px,0)',
+        `width:${SIZE}px`,
+        `height:${SIZE}px`,
+        'border-radius:50%',          // circle shape — matches original CSS
+        'filter:blur(1px)',            // subtle blur for smoother appearance
         'pointer-events:none',
         'will-change:transform',
+        // Start far off-screen to avoid the "shoot from corner" flash
+        'transform:translate3d(-9999px,-9999px,0)',
         // Smooth crossfade when the user switches themes
-        'transition:background 0.45s ease, box-shadow 0.45s ease',
-      ];
-      if (blur > 0.05) styles.push(`filter:blur(${blur.toFixed(2)}px)`);
+        'transition:background-color 0.4s ease, box-shadow 0.4s ease',
+      ].join(';');
 
-      const el = document.createElement('div');
-      el.style.cssText = styles.join(';');
       root.appendChild(el);
       nodes.push(el);
     }
 
-    // ── Apply initial theme colors ──────────────────────────────────────────
-    applyPalette(nodes, isDarkTheme());
+    // ── Apply initial theme colours ───────────────────────────────────────────
+    applyColors(nodes, isDark());
 
-    // ── Watch for theme changes (MutationObserver — zero cost when idle) ────
-    // Fires whenever data-theme or class attributes change on <html>
+    // ── MutationObserver — react to theme changes in real-time ───────────────
+    // Fires only when data-theme or class attributes change on <html>.
+    // Zero cost when idle; no polling, no setInterval.
     const themeObserver = new MutationObserver(() => {
-      applyPalette(nodes, isDarkTheme());
+      applyColors(nodes, isDark());
     });
     themeObserver.observe(document.documentElement, {
       attributes:      true,
       attributeFilter: ['data-theme', 'class'],
     });
 
-    // ── Position & angle state ──────────────────────────────────────────────
-    const pos  = Array.from({ length: COUNT }, () => ({ x: -9999, y: -9999, angle: -90 }));
-    const prev = Array.from({ length: COUNT }, () => ({ x: -9999, y: -9999 }));
-    const mouse = { x: -9999, y: -9999 };
-    let rafId  = 0;
-    let active = false;
+    // ── Position state ────────────────────────────────────────────────────────
+    // `cPos` is the React equivalent of `circle.x` / `circle.y` in vanilla JS.
+    // Each entry stores the position that circle was drawn to last frame.
+    const cPos  = Array.from({ length: COUNT }, () => ({ x: 0, y: 0 }));
+    const mouse = { x: 0, y: 0 };
+    let rafId   = 0;
+    let active  = false;
 
-    // ── Mouse tracking ──────────────────────────────────────────────────────
+    // ── Mouse tracking ────────────────────────────────────────────────────────
     const onMove = (e: MouseEvent) => {
       if (!active) {
-        // Teleport all particles to cursor on first move.
-        // Without this, the trail would shoot from off-screen on init.
-        pos.forEach(p  => { p.x = e.clientX; p.y = e.clientY; });
-        prev.forEach(p => { p.x = e.clientX; p.y = e.clientY; });
+        // Teleport all circles to the cursor on the very first mousemove.
+        // Without this the trail would shoot from the top-left corner (0,0).
+        cPos.forEach(p => { p.x = e.clientX; p.y = e.clientY; });
         active = true;
       }
       mouse.x = e.clientX;
@@ -198,54 +202,54 @@ export default memo(function CursorTrail() {
     };
     window.addEventListener('mousemove', onMove, { passive: true });
 
-    // ── Animation loop ──────────────────────────────────────────────────────
+    // ── Animation loop ────────────────────────────────────────────────────────
+    // This is a direct port of the original vanilla JS `animateCircles()`.
+    // Variable names intentionally match the original for easy comparison:
+    //
+    //   ORIGINAL                          →   HERE
+    //   ─────────────────────────────────────────────────────────────────
+    //   let x = coords.x                  →   let x = mouse.x
+    //   circle.style.left  = x - 12 + "px"→  (baked into translate3d)
+    //   circle.style.top   = y - 12 + "px"→  (baked into translate3d)
+    //   circle.style.scale = (n-i)/n       →  scale(…) in the same transform
+    //   circle.x = x                      →   cPos[index].x = x
+    //   nextCircle.x                      →   cPos[index+1].x  (prev-frame value)
+    //   x += (nextCircle.x - x) * 0.3    →   x += (next.x - x) * EASE  (0.3)
+    //
+    // Performance note: translate3d replaces `left`/`top` to keep all painting
+    // on the GPU compositor thread — same visual output, no reflow.
     const tick = () => {
       rafId = requestAnimationFrame(tick);
       if (!active) return;
 
-      // Lead dot: lerps toward raw mouse position
-      prev[0].x = pos[0].x;
-      prev[0].y = pos[0].y;
-      pos[0].x += (mouse.x - pos[0].x) * LEAD_LERP;
-      pos[0].y += (mouse.y - pos[0].y) * LEAD_LERP;
+      let x = mouse.x;
+      let y = mouse.y;
 
-      // Rotation: atan2(velocity) + 90° because the shape's point faces −Y by default.
-      // We only update the angle when speed² > threshold to avoid jitter at rest.
-      const dx0 = pos[0].x - prev[0].x;
-      const dy0 = pos[0].y - prev[0].y;
-      if (dx0 * dx0 + dy0 * dy0 > 0.04) {
-        pos[0].angle = Math.atan2(dy0, dx0) * (180 / Math.PI) + 90;
-      }
+      nodes.forEach((node, index) => {
+        // ── Position + scale (unchanged logic, GPU-accelerated path) ──────────
+        // translate3d(x - HALF, y - HALF, 0) centres the 24 px circle at (x, y).
+        // scale() shrinks toward the transform-origin, which after the translate
+        // is now at (x, y) — so the circle scales around the cursor point.
+        const scale = (COUNT - index) / COUNT;  // 1.0 → 0.05
+        node.style.transform =
+          `translate3d(${x - HALF}px,${y - HALF}px,0) scale(${scale})`;
 
-      // Trailing dots: each chases the one ahead with progressively less speed
-      for (let i = 1; i < COUNT; i++) {
-        prev[i].x = pos[i].x;
-        prev[i].y = pos[i].y;
+        // ── Store current position — equivalent to `circle.x = x` ────────────
+        cPos[index].x = x;
+        cPos[index].y = y;
 
-        const lerp = Math.max(MIN_LERP, LEAD_LERP - i * LERP_DECAY);
-        pos[i].x += (pos[i - 1].x - pos[i].x) * lerp;
-        pos[i].y += (pos[i - 1].y - pos[i].y) * lerp;
-
-        const dxi = pos[i].x - prev[i].x;
-        const dyi = pos[i].y - prev[i].y;
-        if (dxi * dxi + dyi * dyi > 0.04) {
-          pos[i].angle = Math.atan2(dyi, dxi) * (180 / Math.PI) + 90;
-        }
-      }
-
-      // Write transforms — single style mutation per node, zero layout reads
-      // translate3d centres the teardrop at (pos.x, pos.y); rotate orients the tip
-      for (let i = 0; i < COUNT; i++) {
-        const { ox, oy } = cfgs[i];
-        nodes[i].style.transform =
-          `translate3d(${(pos[i].x - ox).toFixed(2)}px,${(pos[i].y - oy).toFixed(2)}px,0)` +
-          ` rotate(${pos[i].angle.toFixed(2)}deg)`;
-      }
+        // ── Lerp toward the NEXT circle's position from last frame ────────────
+        // `cPos[index+1]` has NOT been updated yet this iteration, so it still
+        // holds last frame's value — exactly matching `nextCircle.x` in vanilla.
+        const next = index + 1 < COUNT ? cPos[index + 1] : cPos[0];
+        x += (next.x - x) * EASE;   // ← 0.3 easing, unchanged
+        y += (next.y - y) * EASE;
+      });
     };
 
     rafId = requestAnimationFrame(tick);
 
-    // ── Cleanup ─────────────────────────────────────────────────────────────
+    // ── Cleanup ───────────────────────────────────────────────────────────────
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', onMove);
@@ -261,7 +265,7 @@ export default memo(function CursorTrail() {
         position:      'fixed',
         inset:         0,
         pointerEvents: 'none',
-        zIndex:        9999,
+        zIndex:        99999,
         overflow:      'hidden',
       }}
     />
