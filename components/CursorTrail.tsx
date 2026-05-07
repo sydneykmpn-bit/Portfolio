@@ -10,7 +10,7 @@ import { useEffect, useRef, memo } from 'react';
 const COUNT = 20;    // 20 circle divs  (matches original HTML)
 const SIZE  = 24;    // px              (matches original CSS)
 const HALF  = SIZE / 2;
-const EASE  = 0.6;   // lerp factor     (matches original JS — do NOT change)
+const EASE  = 1;   // lerp factor     (matches original JS — do NOT change)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // COLOUR PALETTES
