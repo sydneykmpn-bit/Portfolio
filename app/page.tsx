@@ -2,8 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useState, useEffect, memo } from 'react';
-import { motion, useScroll, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const AnimatedBackground = dynamic(() => import('@/components/AnimatedBackground'), { ssr: false });
 const ChatWidget         = dynamic(() => import('@/components/ChatWidget'),          { ssr: false });
@@ -143,14 +143,33 @@ const testimonials = [
   },
 ];
 
-// Back-to-top — isolated, uses Framer Motion scroll hook (no window.addEventListener)
 const ScrollToTop = memo(function ScrollToTop() {
-  const { scrollY } = useScroll();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    return scrollY.on('change', v => setVisible(v > 500));
-  }, [scrollY]);
+    let ticking = false;
+    let lastVisible = false;
+
+    const update = () => {
+      const nextVisible = window.scrollY > 500;
+      if (nextVisible !== lastVisible) {
+        lastVisible = nextVisible;
+        setVisible(nextVisible);
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -186,6 +205,7 @@ const staggerContainer = {
 export default function Page() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [activeTab, setActiveTab] = useState('Featured');
+  const [chatReady, setChatReady] = useState(false);
   const [modal, setModal] = useState<ModalPayload | null>(null);
   const [showVideos, setShowVideos] = useState(false);
   const [formSent, setFormSent] = useState(false);
@@ -214,19 +234,47 @@ export default function Page() {
   }, [menuOpen]);
 
   useEffect(() => {
+    let io: IntersectionObserver | null = null;
     const timer = setTimeout(() => {
-      const io = new IntersectionObserver(
-        entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-        { threshold: 0.05 }
+      io = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('visible');
+            io?.unobserve(entry.target);
+          });
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.01 }
       );
       document.querySelectorAll('.proj-card').forEach(el => {
         el.classList.remove('visible');
-        io.observe(el);
+        io?.observe(el);
       });
-      return () => io.disconnect();
     }, 80);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      io?.disconnect();
+    };
   }, [activeTab]);
+
+  useEffect(() => {
+    const loadChat = () => setChatReady(true);
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const idleId = idleWindow.requestIdleCallback
+      ? idleWindow.requestIdleCallback(loadChat, { timeout: 1800 })
+      : globalThis.setTimeout(loadChat, 1200);
+
+    return () => {
+      if (idleWindow.cancelIdleCallback) {
+        idleWindow.cancelIdleCallback(idleId as number);
+      } else {
+        globalThis.clearTimeout(idleId);
+      }
+    };
+  }, []);
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -256,11 +304,12 @@ export default function Page() {
     }
   };
 
-  const visibleProjects =
+  const visibleProjects = useMemo(() => (
     activeTab === 'Featured' ? allProjects.filter(p => p.img) :
     activeTab === 'All'      ? allProjects :
-    allProjects.filter(p => p.category === activeTab);
-  const archiveCount = allProjects.filter(p => !p.img).length;
+    allProjects.filter(p => p.category === activeTab)
+  ), [activeTab]);
+  const archiveCount = useMemo(() => allProjects.filter(p => !p.img).length, []);
   const calendlyUrl = 'https://calendly.com/sydneykmpn/30min?hide_gdpr_banner=1&primary_color=3b82f6';
 
   return (
@@ -651,7 +700,7 @@ export default function Page() {
             <div className="proj-card clickable-card" key={p.title} onClick={() => setModal({ type: 'project', data: p })}>
               <div className="proj-thumb">
                 {p.img ? (
-                  <Image src={p.img} alt={p.title} fill style={{ objectFit: 'cover' }} />
+                  <Image src={p.img} alt={p.title} fill sizes="(max-width: 600px) 90vw, (max-width: 1024px) 45vw, 31vw" style={{ objectFit: 'cover' }} />
                 ) : (
                   <>
                     <div className="proj-ph-icon">{p.icon}</div>
@@ -816,6 +865,7 @@ export default function Page() {
                 width="100%"
                 frameBorder="0"
                 title="Book a call with Sydney"
+                loading="lazy"
               />
             </div>
           </div>
@@ -901,7 +951,7 @@ export default function Page() {
       <ScrollToTop />
       {modal      && <CardModal modal={modal} onClose={() => setModal(null)} />}
       {showVideos && <VideoModal onClose={() => setShowVideos(false)} />}
-      <ChatWidget />
+      {chatReady && <ChatWidget />}
     </>
   );
 }
