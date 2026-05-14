@@ -23,13 +23,13 @@ const cards = [
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 100, damping: 20 } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 220, damping: 22 } },
 };
 
 const staggerContainer = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.09 } },
+  visible: { transition: { staggerChildren: 0.05 } },
 };
 
 const WhoIHelp = memo(function WhoIHelp() {

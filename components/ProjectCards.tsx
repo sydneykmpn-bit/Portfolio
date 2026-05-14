@@ -41,7 +41,7 @@ export default function ProjectCards() {
       animate="visible"
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: 0.1 } },
+        visible: { transition: { staggerChildren: 0.06 } },
       }}
     >
       <div className="grid grid-cols-1 gap-3">

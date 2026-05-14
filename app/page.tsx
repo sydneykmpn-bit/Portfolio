@@ -175,16 +175,16 @@ const ScrollToTop = memo(function ScrollToTop() {
 });
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 100, damping: 20 } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 220, damping: 22 } },
 };
 const staggerContainer = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.09 } },
+  visible: { transition: { staggerChildren: 0.05 } },
 };
 
 export default function Page() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [activeTab, setActiveTab] = useState('Featured');
   const [modal, setModal] = useState<ModalPayload | null>(null);
   const [showVideos, setShowVideos] = useState(false);
@@ -202,7 +202,7 @@ export default function Page() {
     if (saved === 'dark' || saved === 'light') {
       initial = saved;
     } else {
-      initial = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      initial = 'dark';
     }
     setTheme(initial);
     document.documentElement.setAttribute('data-theme', initial);
