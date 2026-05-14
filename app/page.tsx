@@ -314,7 +314,6 @@ export default function Page() {
 
   return (
     <>
-      <style>{`@keyframes ring-spin { to { transform: rotate(360deg); } }`}</style>
       <ScrollReveal />
       <div className="bg-canvas" />
       <AnimatedBackground />
@@ -481,7 +480,6 @@ export default function Page() {
                   inset: '-4px',
                   borderRadius: '50%',
                   background: 'conic-gradient(from 0deg, transparent 0%, rgba(34,211,238,.9) 40%, rgba(59,130,246,.9) 60%, transparent 100%)',
-                  animation: 'ring-spin 3s linear infinite',
                   zIndex: 1,
                 }}
               />
