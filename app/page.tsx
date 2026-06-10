@@ -106,6 +106,12 @@ const allProjects = [
   },
 ];
 
+type Project = (typeof allProjects)[number];
+
+const hasProjectImage = (project: Project): project is Project & { img: string } => (
+  typeof project.img === 'string' && project.img.trim() !== ''
+);
+
 const TOOL_TABS = ['Make', 'n8n', 'Zapier'];
 
 const faqsLeft = [
@@ -309,7 +315,6 @@ export default function Page() {
     activeTab === 'All'      ? allProjects :
     allProjects.filter(p => p.category === activeTab)
   ), [activeTab]);
-  const archiveCount = useMemo(() => allProjects.filter(p => !p.img).length, []);
   const calendlyUrl = 'https://calendly.com/sydneykmpn/30min?hide_gdpr_banner=1&primary_color=3b82f6';
 
   return (
@@ -694,17 +699,10 @@ export default function Page() {
           </button>
         </div>
         <div className="projects-grid">
-          {visibleProjects.map((p) => (
+          {visibleProjects.filter(hasProjectImage).map((p) => (
             <div className="proj-card clickable-card" key={p.title} onClick={() => setModal({ type: 'project', data: p })}>
               <div className="proj-thumb">
-                {p.img ? (
-                  <Image src={p.img} alt={p.title} fill sizes="(max-width: 600px) 90vw, (max-width: 1024px) 45vw, 31vw" style={{ objectFit: 'cover' }} />
-                ) : (
-                  <>
-                    <div className="proj-ph-icon">{p.icon}</div>
-                    <div className="proj-ph-label">Screenshot coming soon</div>
-                  </>
-                )}
+                <Image src={p.img} alt={p.title} fill sizes="(max-width: 600px) 90vw, (max-width: 1024px) 45vw, 31vw" style={{ objectFit: 'cover' }} />
               </div>
               <div className="proj-body">
                 <div className="proj-tags">{p.tags.map(t => <span className="ptag" key={t}>{t}</span>)}</div>
@@ -742,12 +740,6 @@ export default function Page() {
             </div>
           ))}
         </div>
-        {activeTab === 'Featured' && archiveCount > 0 && (
-          <div className="proj-archive-hint">
-            {archiveCount} more project{archiveCount !== 1 ? 's' : ''} in archive —{' '}
-            <button onClick={() => setActiveTab('All')}>View all</button>
-          </div>
-        )}
       </section>
 
       {/* FAQ */}
